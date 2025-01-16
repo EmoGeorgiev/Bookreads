@@ -16,7 +16,7 @@ public class BookUser {
     private String password;
     @Column(nullable = false)
     private String email;
-
+    @OneToMany(mappedBy = "user")
     private List<Book> books;
     public BookUser() {
 

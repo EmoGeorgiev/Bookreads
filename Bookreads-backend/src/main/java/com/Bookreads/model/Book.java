@@ -28,6 +28,9 @@ public class Book {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Bookshelf bookshelf;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private BookUser user;
 
     public Book() {
 
