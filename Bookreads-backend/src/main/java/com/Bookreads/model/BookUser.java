@@ -2,6 +2,7 @@ package com.Bookreads.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public class BookUser {
     @Column(nullable = false)
     private String email;
     @OneToMany(mappedBy = "user")
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
     public BookUser() {
 
     }

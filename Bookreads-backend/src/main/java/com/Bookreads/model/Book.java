@@ -19,11 +19,8 @@ public class Book {
     private String author;
     @Column(nullable = false)
     private Integer pageCount;
-    @Column(nullable = false)
     private Integer rating;
-    @Column(nullable = false)
     private String review;
-    @Column(nullable = false)
     private LocalDate dateRead;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -104,5 +101,13 @@ public class Book {
 
     public void setBookshelf(Bookshelf bookshelf) {
         this.bookshelf = bookshelf;
+    }
+
+    public BookUser getUser() {
+        return user;
+    }
+
+    public void setUser(BookUser user) {
+        this.user = user;
     }
 }
