@@ -9,6 +9,10 @@ public class BookMapper {
 
     }
     public static BookDto bookToBookDto(Book book) {
+        if (book == null) {
+            return null;
+        }
+
         return new BookDto(
                 book.getId(),
                 book.getTitle(),
@@ -23,6 +27,10 @@ public class BookMapper {
     }
 
     public static Book bookDtoToBook(BookDto bookDto) {
+        if (bookDto == null) {
+            return null;
+        }
+
         Book book = new Book();
         book.setId(bookDto.id());
         book.setTitle(bookDto.title());
