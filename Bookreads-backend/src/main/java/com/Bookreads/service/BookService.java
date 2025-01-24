@@ -4,6 +4,8 @@ import com.Bookreads.dto.BookDto;
 import com.Bookreads.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
     private final BookRepository bookRepository;
@@ -12,6 +14,9 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    public List<BookDto> getBooksByUserId(Long id) {
+        return null;
+    }
     public BookDto addBook(BookDto book) {
         return null;
     }
