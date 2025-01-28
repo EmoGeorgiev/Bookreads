@@ -3,10 +3,8 @@ package com.Bookreads.service;
 import com.Bookreads.dto.UserDto;
 import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.mapper.UserMapper;
-import com.Bookreads.model.Book;
 import com.Bookreads.model.BookUser;
 import com.Bookreads.repository.UserRepository;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
