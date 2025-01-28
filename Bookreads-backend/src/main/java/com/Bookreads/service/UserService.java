@@ -3,6 +3,7 @@ package com.Bookreads.service;
 import com.Bookreads.dto.UserDto;
 import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.mapper.UserMapper;
+import com.Bookreads.model.Book;
 import com.Bookreads.model.BookUser;
 import com.Bookreads.repository.UserRepository;
 import org.springframework.security.core.parameters.P;
@@ -33,7 +34,14 @@ public class UserService {
     }
 
     public UserDto updateUser(Long id, UserDto userDto) {
-        return null;
+        BookUser oldUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+
+        oldUser.setUsername(userDto.username());
+        oldUser.setEmail(userDto.email());
+
+        BookUser updatedUser = userRepository.save(oldUser);
+        return UserMapper.userToUserDto(updatedUser);
     }
 
     public void deleteUser(Long id) {
