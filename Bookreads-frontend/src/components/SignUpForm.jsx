@@ -1,19 +1,19 @@
 import { useState } from 'react'
 
-const LoginForm = () => {
+const SignUpForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-
-    const handleLogin = (e) => {
+    const [email, setEmail] = useState('')
+    
+    const handleSignUp = (e) => {
         e.preventDefault()
     }
 
     return (
         <div>
             <h1>Bookreads</h1>
-            <h1>Log in</h1>
-
-            <form onSubmit={handleLogin}>
+            <h1>Create Account</h1>
+            <form onSubmit={handleSignUp}>
                 <div>
                     <input 
                         type='text'
@@ -32,11 +32,20 @@ const LoginForm = () => {
                         placeholder='Password'
                     />
                 </div>
-                <button>Log in</button>
+                <div>
+                    <input 
+                        type='email'
+                        value={email}
+                        name='email'
+                        onChange={({ target }) => setEmail(target.value)}
+                        placeholder='Email'
+                    />
+                </div>
+                <button>Create account</button>
             </form>
-            <p>New to Bookreads? Sign up</p>
+            <p>Already have an account? Log in</p>
         </div>
     )
 }
 
-export default LoginForm    
+export default SignUpForm
