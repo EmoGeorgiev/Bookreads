@@ -1,6 +1,11 @@
 package com.Bookreads.service;
 
+import com.Bookreads.dto.SignUpDto;
+import com.Bookreads.dto.UserDto;
+import com.Bookreads.exception.PasswordsDoNotMatchException;
+import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.exception.UsernameAlreadyExistsException;
+import com.Bookreads.mapper.UserMapper;
 import com.Bookreads.model.BookUser;
 import com.Bookreads.model.SecurityUser;
 import com.Bookreads.repository.UserRepository;
@@ -20,12 +25,29 @@ public class JpaUserDetailsService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public BookUser createUser(BookUser user) {
+    public UserDto createUser(SignUpDto signUpDto) {
+        BookUser user = UserMapper.signUpDtoToUser(signUpDto);
+
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new UsernameAlreadyExistsException("The username : " + user.getUsername() + " already exists");
         }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        BookUser createdUser = userRepository.save(user);
+        return UserMapper.userToUserDto(createdUser);
+    }
+
+    public UserDto updatePassword(Long id, String oldPassword, String newPassword) {
+        BookUser user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+
+        if (!passwordEncoder.encode(oldPassword).equals(user.getPassword())) {
+            throw new PasswordsDoNotMatchException("The passwords do not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        BookUser updatedUser = userRepository.save(user);
+        return UserMapper.userToUserDto(updatedUser);
     }
 
     @Override
