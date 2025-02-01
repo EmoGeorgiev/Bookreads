@@ -1,4 +1,5 @@
 import Navigation from './components/Navigation'
+import ProtectedRoute from './components/ProtectedRoute'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import Home from './components/Home'
@@ -16,10 +17,10 @@ const App = () => {
       <Routes>
         <Route path='/login' element={<LoginForm />} />
         <Route path='/signup' element={<SignupForm />} />
-        <Route path='/' element={<Home />} />
-        <Route path='/books' element={<BookList userId={id} />} />
-        <Route path='/users' element={<UserList />} />
-        <Route path='/settings' element={<Settings />} />
+        <Route path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path='/books' element={<ProtectedRoute><BookList userId={id} /></ProtectedRoute>} />
+        <Route path='/users' element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+        <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       </Routes>
     </>
   )
