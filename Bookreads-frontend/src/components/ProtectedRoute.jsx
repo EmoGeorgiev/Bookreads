@@ -8,9 +8,9 @@ const ProtectedRoute = ({ children }) => {
         return <div>Loading...</div>
     }
 
-    // if (!isAuthencticated) {
-    //     return <Navigate to='/login' />
-    // }
+    if (!isAuthencticated) {
+        return <Navigate to='/login' />
+    }
 
     return children
 }
