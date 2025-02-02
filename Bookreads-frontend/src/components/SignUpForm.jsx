@@ -1,12 +1,33 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import signupService from '../services/signup'
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
+    const navigate = useNavigate()
     
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault()
+
+        const credentials = {
+            username,
+            password,
+            email
+        }
+        
+        try {
+            const user = await signupService.signup(credentials)
+            if (user !== null) {
+                setUsername('')
+                setPassword('')
+                setEmail('')
+                navigate('/login')
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
