@@ -1,11 +1,29 @@
 import { useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from './AuthContext'
+import loginService from '../services/login'
+ 
 const LoginForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate()
+    const { login } = useAuth()
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
+
+        try {
+            const data = await loginService.login({
+                username,
+                password
+            })
+            login(data)
+            setUsername('')
+            setPassword('')
+            navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
