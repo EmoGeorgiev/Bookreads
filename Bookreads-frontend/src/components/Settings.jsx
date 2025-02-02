@@ -6,7 +6,7 @@ const Settings = () => {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
 
-    //const { user } = useAuth()
+    const { user } = useAuth()
 
     const handleUsernameChange = (e) => {
         e.preventDefault()
@@ -23,12 +23,13 @@ const Settings = () => {
                 <h2>Username change</h2>
                 <form onSubmit={handleUsernameChange}>
                     <div>
+                        <p>Current username : {user.username}</p>
                         <input
                             type='text'
                             value={newUsername}
                             name='username'
                             onChange={({ target }) => setNewUsername(target.value)}
-                            placeholder='Username' //{user.username}
+                            placeholder='Username'
                         />
                     </div>
                     <div>

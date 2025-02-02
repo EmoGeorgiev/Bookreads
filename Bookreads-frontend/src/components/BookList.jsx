@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Bookshelf } from '../util/Bookshelf'
 import Book from './Book'
 
@@ -14,16 +14,22 @@ const BookList = ({ userId }) => {
     const [books, setBooks] = useState(testBooks)
     const [bookshelf, setBookshelf] = useState(Bookshelf.ALL)
 
-    const getBooks = async () => {
+    // useEffect(() => {
+    //     getBooks()
+    // }, [])
 
+    const getBooks = async () => {
+        //await
     }
 
-    const updateBook = async updatedBook => {
-        
+    const updateBook = async newBook => {
+        const updatedBook = {} // await update newBook
+        books.map(book => book.id === updatedBook.id ? updatedBook : book)
     }
 
     const deleteBook = async id => {
-
+        //await delete id
+        books.filter(book => book.id !== id)
     }
     
     const calculateLength = (bookshelf) => {

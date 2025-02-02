@@ -41,9 +41,11 @@ const UserList = () => {
     return (
         <div>
             <h1>Users</h1>
+            <p>Search by username:</p>
             <input
                 type='text'
                 value={query}
+                name='query'
                 onChange={handleQueryChange}
             />
             <button onClick={handleClear}>Clear</button>
@@ -54,10 +56,10 @@ const UserList = () => {
                 </div>
                 : <table>
                     <thead>
-                        <th>
-                            <td>Username</td>
-                            <td>Email</td>
-                        </th>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {filteredUsers.map(user => <tr key={user.id}>

@@ -1,26 +1,12 @@
 import { useState } from 'react'
-//import { useAuth } from './AuthContext'
+import { useAuth } from './AuthContext'
 
 const Book = ({ book, userId, updateBook, deleteBook }) => {
-    const [title, setTitle] = useState(book.title)
-    const [author, setAuthor] = useState(book.author)
-    const [pageCount, setPageCount] = useState(book.pageCount)
-    const [rating, setRating] = useState(book.rating)
-    const [bookshelf, setBookshelf] = useState(book.bookshelf)
-    const [review, setReview] = useState(book.review)
-    const [dateRead, setDateRead] = useState(book.dateRead)
-    
     const [isEdited, setIsEdited] = useState(false)
-
-    //const { user } = useAuth()
+    const { user } = useAuth()
 
     const handleEdit = () => {
-        //setIsEdited(true)
-    }
-
-    const handleUpdate = () => {
-        const updatedbBook = {}
-        updateBook(updatedbBook)
+        setIsEdited(!isEdited)
     }
 
     const handleDelete = () => {
@@ -31,20 +17,20 @@ const Book = ({ book, userId, updateBook, deleteBook }) => {
 
     return (
         <tr>
-            <td>{title}</td>
-            <td>{author}</td>
-            <td>{pageCount}</td>
-            <td>{rating}</td>
-            <td>{bookshelf}</td>
-            <td>{review}</td>
-            <td>{dateRead}</td>
-            {userId === userId && 
+            <td>{book.title}</td>
+            <td>{book.author}</td>
+            <td>{book.pageCount}</td>
+            <td>{book.rating}</td>
+            <td>{book.bookshelf}</td>
+            <td>{book.review}</td>
+            <td>{book.dateRead}</td>
+            {user.id === userId && 
                 <td>
                     <button onClick={handleEdit}>
                         Edit
                     </button>
                 </td>}
-            {userId === userId &&
+            {user.id === userId &&
                 <td>
                     <button onClick={handleDelete}>
                         Delete
