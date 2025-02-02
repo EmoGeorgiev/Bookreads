@@ -76,6 +76,9 @@ public class Book {
     }
 
     public void setRating(Integer rating) {
+        if (rating == null) {
+            return;
+        }
         if (rating <= 0 || rating > 5) {
             throw new RatingMustBeBetweenOneAndFiveException("Rating must be between 1 and 5");
         }
