@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class BookService {
         BookUser user =  userRepository.findById(bookDto.userId())
                 .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
 
-        Optional<Book> optionalBook = bookRepository.findByTitle(bookDto.title());
+        Optional<Book> optionalBook = bookRepository.findByTitleAndUserId(bookDto.title(), bookDto.userId());
         if (optionalBook.isPresent()
                 && optionalBook.get().getAuthor().equals(bookDto.author())) {
             throw new BookAlreadyExistsException("This book has already been added");
