@@ -19,8 +19,11 @@ public class Book {
     private String author;
     @Column(nullable = false)
     private Integer pageCount;
+    @Column(nullable = true)
     private Integer rating;
+    @Column(nullable = true)
     private String review;
+    @Column(nullable = true)
     private LocalDate dateRead;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
