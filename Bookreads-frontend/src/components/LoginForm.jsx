@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import loginService from '../services/login'
  
@@ -52,7 +52,7 @@ const LoginForm = () => {
                 </div>
                 <button>Log in</button>
             </form>
-            <p>New to Bookreads? Sign up</p>
+            <p>New to Bookreads? <Link to='/signup'>Sign up</Link></p>
         </div>
     )
 }

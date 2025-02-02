@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import signupService from '../services/signup'
 
 const SignUpForm = () => {
@@ -64,7 +64,7 @@ const SignUpForm = () => {
                 </div>
                 <button>Create account</button>
             </form>
-            <p>Already have an account? Log in</p>
+            <p>Already have an account? <Link to='/login'>Log in</Link></p>
         </div>
     )
 }
