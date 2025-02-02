@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import userService from '../services/users'
 
 const testUsers = [
     { id: 1, username: 'james.smith', email: 'james.smith@gmail.com' },
@@ -18,8 +19,18 @@ const UserList = () => {
     const [filteredUsers, setFilteredUsers] = useState(testUsers)
     const [query, setQuery] = useState('')
     
-    const getUsers = async () => {
+    useEffect(() => {
+        getUsers()
+    }, [])
 
+    const getUsers = async () => {
+        try {
+            const newUsers = await userService.getUsers()
+            setUsers(newUsers)
+            setFilteredUsers(newUsers)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleQueryChange = (e) => {

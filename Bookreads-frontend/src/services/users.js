@@ -18,7 +18,12 @@ const updateUser = async (id, user) => {
 }
 
 const updatePassword = async (id, oldPassword, newPassword) => {
-    const response = await axiosInstance.put(`${baseUrl}/${id}/password`, { oldPassword, newPassword })
+    const response = await axiosInstance.put(`${baseUrl}/${id}/password`, null, { 
+        params: {
+            oldPassword,
+            newPassword
+        }
+    })
     return response.data
 }
 
