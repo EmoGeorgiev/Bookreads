@@ -1,35 +1,43 @@
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { Bookshelf } from '../util/Bookshelf'
 import Book from './Book'
+import bookService from '../services/books'
 
-const testBooks = [
-    {'id': 1, 'title': 'The Great Gatsby', 'author': 'F. Scott Fitzgerald', 'pageCount': 180, 'rating': 5, 'review': 'Great book!', 'dateRead': '2021-01-01', 'bookshelf': Bookshelf.READ},
-    {'id': 2, 'title': 'To Kill a Mockingbird', 'author': 'Harper Lee', 'pageCount': 281, 'rating': 4, 'review': 'Good book!', 'dateRead': '2021-01-02', 'bookshelf': Bookshelf.READ},
-    {'id': 3, 'title': '1984', 'author': 'George Orwell', 'pageCount': 328, 'rating': 3, 'review': 'Okay book!', 'dateRead': '2021-01-03', 'bookshelf': Bookshelf.CURRENTLY_READING},
-    {'id': 4, 'title': 'Pride and Prejudice', 'author': 'Jane Austen', 'pageCount': 226, 'rating': 2, 'review': 'Bad book!', 'dateRead': '2021-01-04', 'bookshelf': Bookshelf.WANT_TO_READ},
-    {'id': 5, 'title': 'The Catcher in the Rye', 'author': 'J.D. Salinger', 'pageCount': 230, 'rating': 1, 'review': 'Terrible book!', 'dateRead': '2021-01-05', 'bookshelf': Bookshelf.WANT_TO_READ}
-]
-
-const BookList = ({ userId }) => {
-    const [books, setBooks] = useState(testBooks)
+const BookList = () => {
+    const [books, setBooks] = useState([])
     const [bookshelf, setBookshelf] = useState(Bookshelf.ALL)
+    const { userId } = useParams()
 
-    // useEffect(() => {
-    //     getBooks()
-    // }, [])
+    useEffect(() => {
+        const getBooks = async () => {
+            try {
+                const newBooks = await bookService.getBooksByUserId(userId)
+                setBooks(newBooks)
+            } catch (error) {
+                console.log(error)
+            }
+        }
 
-    const getBooks = async () => {
-        //await
-    }
+        getBooks()
+    }, [userId])
 
     const updateBook = async newBook => {
-        const updatedBook = {} // await update newBook
-        books.map(book => book.id === updatedBook.id ? updatedBook : book)
+        try {
+            const updatedBook = await bookService.updateBook(newBook.id, newBook)
+            setBooks(books.map(book => book.id === updatedBook.id ? updatedBook : book))     
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const deleteBook = async id => {
-        //await delete id
-        books.filter(book => book.id !== id)
+        try {
+            await bookService.deleteBook(id)
+            setBooks(books.filter(book => book.id !== id))
+        } catch (error) {
+            console.log(error)
+        }
     }
     
     const calculateLength = (bookshelf) => {

@@ -1,6 +1,6 @@
 import axiosInstance from './axiosInstance'
 
-const baseUrl = '/books/'
+const baseUrl = '/books'
 
 const getBooksByUserId = async userId => {
     const response = await axiosInstance.get(`${baseUrl}/${userId}`)
