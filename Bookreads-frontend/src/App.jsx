@@ -9,8 +9,6 @@ import Settings from './components/Settings'
 import { Routes, Route } from 'react-router-dom'
 
 const App = () => {
-  const id = 1
-
   return (
     <>
       <Navigation />
@@ -18,7 +16,7 @@ const App = () => {
         <Route path='/login' element={<LoginForm />} />
         <Route path='/signup' element={<SignUpForm />} />
         <Route path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path='/books' element={<ProtectedRoute><BookList userId={id} /></ProtectedRoute>} />
+        <Route path='/users/:userId/books' element={<ProtectedRoute><BookList /></ProtectedRoute>} />
         <Route path='/users' element={<ProtectedRoute><UserList /></ProtectedRoute>} />
         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       </Routes>
