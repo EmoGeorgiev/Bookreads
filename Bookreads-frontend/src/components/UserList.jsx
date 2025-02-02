@@ -1,37 +1,26 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import userService from '../services/users'
 
-const testUsers = [
-    { id: 1, username: 'james.smith', email: 'james.smith@gmail.com' },
-    { id: 2, username: 'susan.johnson', email: 'susan.johnson@hotmail.com' },
-    { id: 3, username: 'michael.williams', email: 'michael.williams@yahoo.com' },
-    { id: 4, username: 'emily.brown', email: 'emily.brown@outlook.com' },
-    { id: 5, username: 'david.jones', email: 'david.jones@icloud.com' },
-    { id: 6, username: 'laura.miller', email: 'laura.miller@gmail.com' },
-    { id: 7, username: 'robert.davis', email: 'robert.davis@yahoo.com' },
-    { id: 8, username: 'lisa.garcia', email: 'lisa.garcia@hotmail.com' },
-    { id: 9, username: 'kevin.martinez', email: 'kevin.martinez@outlook.com' },
-    { id: 10, username: 'isabella.lee', email: 'isabella.lee@gmail.com' }
-]
-
 const UserList = () => {
-    const [users, setUsers] = useState(testUsers)
-    const [filteredUsers, setFilteredUsers] = useState(testUsers)
+    const [users, setUsers] = useState([])
+    const [filteredUsers, setFilteredUsers] = useState([])
     const [query, setQuery] = useState('')
+    const navigate = useNavigate()
     
     useEffect(() => {
+        const getUsers = async () => {
+            try {
+                const newUsers = await userService.getUsers()
+                setUsers(newUsers)
+                setFilteredUsers(newUsers)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
         getUsers()
     }, [])
-
-    const getUsers = async () => {
-        try {
-            const newUsers = await userService.getUsers()
-            setUsers(newUsers)
-            setFilteredUsers(newUsers)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     const handleQueryChange = (e) => {
         const newQuery = e.target.value.toLowerCase()
@@ -45,8 +34,8 @@ const UserList = () => {
         setFilteredUsers(users)
     }
 
-    const handleViewBooks = () => {
-
+    const handleViewBooks = userId => {
+        navigate(`/users/${userId}/books`)
     }
 
     return (
@@ -77,7 +66,7 @@ const UserList = () => {
                             <td>{user.username}</td>
                             <td>{user.email}</td>
                             <td>
-                                <button onClick={handleViewBooks}>
+                                <button onClick={() => handleViewBooks(user.id)}>
                                     View Books
                                 </button>
                             </td>
