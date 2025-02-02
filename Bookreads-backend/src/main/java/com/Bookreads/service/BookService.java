@@ -29,7 +29,7 @@ public class BookService {
     public List<BookDto> getBooksByUserId(Long userId) {
         return bookRepository.findByUserId(userId)
                 .stream()
-                .sorted(Comparator.comparing(Book::getDateRead))
+                .sorted(Comparator.comparing(Book::getDateRead, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .map(BookMapper::bookToBookDto)
                 .collect(Collectors.toList());
     }
