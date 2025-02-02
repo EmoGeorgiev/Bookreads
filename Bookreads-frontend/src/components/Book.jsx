@@ -14,13 +14,13 @@ const Book = ({ book, userId, updateBook, deleteBook }) => {
             deleteBook(book.id)
         }
     }
-
+    
     return (
         <tr>
             <td>{book.title}</td>
             <td>{book.author}</td>
             <td>{book.pageCount}</td>
-            <td>{book.rating}</td>
+            <td>{book.rating ? `${book.rating}/5` : ''}</td>
             <td>{book.bookshelf}</td>
             <td>{book.review}</td>
             <td>{book.dateRead}</td>

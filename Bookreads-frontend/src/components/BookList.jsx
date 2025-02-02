@@ -22,6 +22,15 @@ const BookList = () => {
         getBooks()
     }, [userId])
 
+    const addBook = async book => {
+        try {
+            const newBook = await bookService.addBook(book)
+            setBooks(books.concat(newBook))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const updateBook = async newBook => {
         try {
             const updatedBook = await bookService.updateBook(newBook.id, newBook)
@@ -83,7 +92,7 @@ const BookList = () => {
                         .filter(book => bookshelf === Bookshelf.ALL ? book : book.bookshelf === bookshelf)
                         .map(book => <Book key={book.id} 
                                             book={book} 
-                                            userId={userId} 
+                                            userId={parseInt(userId)} 
                                             updateBook={updateBook} 
                                             deleteBook={deleteBook} />)}
                 </tbody>
