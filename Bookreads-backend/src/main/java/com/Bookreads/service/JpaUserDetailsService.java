@@ -41,7 +41,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         BookUser user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
 
-        if (!passwordEncoder.encode(oldPassword).equals(user.getPassword())) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new PasswordsDoNotMatchException("The passwords do not match");
         }
 
