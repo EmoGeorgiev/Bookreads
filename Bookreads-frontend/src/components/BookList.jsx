@@ -28,7 +28,8 @@ const BookList = () => {
     const updateBook = async newBook => {
         try {
             const updatedBook = await bookService.updateBook(newBook.id, newBook)
-            setBooks(books.map(book => book.id === updatedBook.id ? updatedBook : book))     
+            setBooks(books.map(book => book.id === updatedBook.id ? updatedBook : book))
+            setIsEdited(false)    
         } catch (error) {
             console.log(error)
         }
@@ -100,6 +101,7 @@ const BookList = () => {
                     </table>
                 </div> :
                 <div>
+                    <h1>Edit Book</h1>
                      <BookForm book={editedBook} save={updateBook} />
                      <button onClick={() => handleEdit(null)}>Cancel</button>
                 </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useAuth } from './AuthContext'
 import { Bookshelf } from '../util/Bookshelf'
 
 const BookForm = ({ book, save }) => {
@@ -9,8 +10,11 @@ const BookForm = ({ book, save }) => {
     const [bookshelf, setBookshelf] = useState(book.bookshelf)
     const [review, setReview] = useState(book.review)
     const [dateRead, setDateRead] = useState(book.dateRead)
+    const { user } = useAuth()
 
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault()
+
         const newBook = {
             ...book,
             title,
@@ -19,14 +23,15 @@ const BookForm = ({ book, save }) => {
             rating,
             bookshelf,
             review,
-            dateRead
+            dateRead,
+            'userId': user.id
         }
         save(newBook)
     }
 
     return (
         <div>
-            <form>
+            <form onSubmit={handleSave}>
                 <div>
                     <p>Title:</p>
                     <input
@@ -89,7 +94,7 @@ const BookForm = ({ book, save }) => {
                     />
                 </div>
                 <div>
-                    <button onClick={handleSave}>
+                    <button>
                         Save
                     </button>
                 </div>
