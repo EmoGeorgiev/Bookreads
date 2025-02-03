@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './AuthContext'
-import ChangeUsername from './ChangeUsername'
-import ChangeEmail from './ChangeEmail'
+import ChangeField from './ChangeField'
 import ChangePassword from './ChangePassword'
 import userService from '../services/users'
 
@@ -52,8 +51,8 @@ const Settings = () => {
     return (
         <div>
             <h1>Settings</h1>
-            <ChangeUsername username={currentUser.username} usernameChange={usernameChange} />
-            <ChangeEmail email={currentUser.email} emailChange={emailChange} />
+            <ChangeField fieldName={'username'} fieldValue={currentUser.username} fieldChange={usernameChange} />
+            <ChangeField fieldName={'email'} fieldValue={currentUser.email} fieldChange={emailChange} />
             <ChangePassword passwordChange={passwordChange} />
         </div>
     )

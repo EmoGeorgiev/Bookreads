@@ -6,14 +6,9 @@ const ChangePassword = ({ passwordChange }) => {
 
     const handlePasswordChange = e => {
         e.preventDefault()
-        
-        try {
-            passwordChange(oldPassword, newPassword)
-            setOldPassword('')
-            setNewPassword('')
-        } catch (error) {
-            console.log(error)
-        }
+        passwordChange(oldPassword, newPassword)
+        setOldPassword('')
+        setNewPassword('')
     }
 
     return (
