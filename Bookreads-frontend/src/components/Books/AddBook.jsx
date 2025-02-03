@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from './AuthContext'
+import { useAuth } from '../Auth/AuthContext'
 import BookForm from './BookForm'
-import bookService from '../services/books'
+import bookService from '../../services/books'
 
 const AddBook = () => {
     const { user } = useAuth()

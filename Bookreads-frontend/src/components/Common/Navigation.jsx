@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useAuth } from './AuthContext'
+import { useAuth } from '../Auth/AuthContext'
 
 const Navigation = () => {
     const { user, logout, isAuthenticated } = useAuth()

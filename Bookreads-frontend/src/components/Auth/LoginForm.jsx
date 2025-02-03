@@ -1,30 +1,26 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import signupService from '../services/signup'
-
-const SignUpForm = () => {
+import { useAuth } from './AuthContext'
+import loginService from '../../services/login'
+ 
+const LoginForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [email, setEmail] = useState('')
     const navigate = useNavigate()
-    
-    const handleSignUp = async e => {
+    const { login } = useAuth()
+
+    const handleLogin = async e => {
         e.preventDefault()
 
-        const credentials = {
-            username,
-            password,
-            email
-        }
-        
         try {
-            const user = await signupService.signup(credentials)
-            if (user !== null) {
-                setUsername('')
-                setPassword('')
-                setEmail('')
-                navigate('/login')
-            }
+            const data = await loginService.login({
+                username,
+                password
+            })
+            login(data)
+            setUsername('')
+            setPassword('')
+            navigate('/')
         } catch (error) {
             console.log(error)
         }
@@ -33,8 +29,9 @@ const SignUpForm = () => {
     return (
         <div>
             <h1>Bookreads</h1>
-            <h1>Create Account</h1>
-            <form onSubmit={handleSignUp}>
+            <h1>Log in</h1>
+
+            <form onSubmit={handleLogin}>
                 <div>
                     <input 
                         type='text'
@@ -53,20 +50,11 @@ const SignUpForm = () => {
                         placeholder='Password'
                     />
                 </div>
-                <div>
-                    <input 
-                        type='email'
-                        value={email}
-                        name='email'
-                        onChange={({ target }) => setEmail(target.value)}
-                        placeholder='Email'
-                    />
-                </div>
-                <button>Create account</button>
+                <button>Log in</button>
             </form>
-            <p>Already have an account? <Link to='/login'>Log in</Link></p>
+            <p>New to Bookreads? <Link to='/signup'>Sign up</Link></p>
         </div>
     )
 }
 
-export default SignUpForm
+export default LoginForm    

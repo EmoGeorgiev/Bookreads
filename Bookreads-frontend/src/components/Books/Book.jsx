@@ -1,4 +1,4 @@
-import { useAuth } from './AuthContext'
+import { useAuth } from '../Auth/AuthContext'
 
 const Book = ({ book, userId, handleEdit, deleteBook }) => {
     const { user } = useAuth()

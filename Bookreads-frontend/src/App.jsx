@@ -1,13 +1,13 @@
-import Navigation from './components/Navigation'
-import ProtectedRoute from './components/ProtectedRoute'
-import LoginForm from './components/LoginForm'
-import SignUpForm from './components/SignUpForm'
-import Home from './components/Home'
-import BookList from './components/BookList'
-import AddBook from './components/AddBook'
-import UserList from './components/UserList'
-import Settings from './components/Settings'
 import { Routes, Route } from 'react-router-dom'
+import Navigation from './components/Common/Navigation'
+import ProtectedRoute from './components/Auth/ProtectedRoute'
+import LoginForm from './components/Auth/LoginForm'
+import SignUpForm from './components/Auth/SignUpForm'
+import Home from './components/Common/Home'
+import BookList from './components/Books/BookList'
+import AddBook from './components/Books/AddBook'
+import UserList from './components/Users/UserList'
+import Settings from './components/Settings/Settings'
 
 const App = () => {
   return (

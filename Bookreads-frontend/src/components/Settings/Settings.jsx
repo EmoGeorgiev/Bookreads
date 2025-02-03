@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useAuth } from './AuthContext'
+import { useAuth } from '../Auth/AuthContext'
 import ChangeField from './ChangeField'
 import ChangePassword from './ChangePassword'
-import userService from '../services/users'
+import userService from '../../services/users'
 
 const Settings = () => {
     const [currentUser, setCurrentUser] = useState({'username': ' ','email': '','id': -1})

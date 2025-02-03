@@ -1,5 +1,5 @@
 import Book from './Book'
-import { Bookshelf } from '../util/Bookshelf'
+import { Bookshelf } from '../../util/Bookshelf'
 
 const BookTable = ({ books, bookshelf, userId, handleEdit, deleteBook }) => {
     return (

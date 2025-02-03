@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import UserTable from './UserTable'
-import userService from '../services/users'
 import UsernameSearch from './UsernameSearch'
+import UserTable from './UserTable'
+import userService from '../../services/users'
 
 const UserList = () => {
     const [users, setUsers] = useState([])

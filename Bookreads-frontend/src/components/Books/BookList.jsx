@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Bookshelf } from '../util/Bookshelf'
+import { Bookshelf } from '../../util/Bookshelf'
 import BookForm from './BookForm'
 import BookTable from './BookTable'
 import BookshelfCategory from './BookshelfCategory'
-import bookService from '../services/books'
+import bookService from '../../services/books'
 
 const BookList = () => {
     const [books, setBooks] = useState([])

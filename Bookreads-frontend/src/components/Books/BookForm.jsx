@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useAuth } from './AuthContext'
-import { Bookshelf } from '../util/Bookshelf'
+import { useAuth } from '../Auth/AuthContext'
+import { Bookshelf } from '../../util/Bookshelf'
 
 const BookForm = ({ book, save }) => {
     const [title, setTitle] = useState(book.title)
