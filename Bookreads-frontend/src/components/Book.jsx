@@ -15,7 +15,7 @@ const Book = ({ book, userId, handleEdit, deleteBook }) => {
             <td>{book.author}</td>
             <td>{book.pageCount}</td>
             <td>{book.rating ? `${book.rating}/5` : ''}</td>
-            <td>{book.bookshelf}</td>
+            <td>{book.bookshelf.toLowerCase()}</td>
             <td>{book.review}</td>
             <td>{book.dateRead}</td>
             {user.id === userId && 

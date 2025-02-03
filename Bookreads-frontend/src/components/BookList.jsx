@@ -102,10 +102,9 @@ const BookList = () => {
                 </div> :
                 <div>
                     <h1>Edit Book</h1>
-                     <BookForm book={editedBook} save={updateBook} />
-                     <button onClick={() => handleEdit(null)}>Cancel</button>
-                </div>
-            }
+                    <BookForm book={editedBook} save={updateBook} />
+                    <button onClick={() => handleEdit(null)}>Cancel</button>
+                </div>}
         </>
     )
 }
