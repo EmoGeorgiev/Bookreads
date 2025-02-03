@@ -18,14 +18,14 @@ const ChangeField = ({ fieldName, fieldValue, fieldChange }) => {
                     <input
                         type='text'
                         value={field}
-                        name='username'
+                        name={fieldName}
                         onChange={({ target }) => setField(target.value)}
-                        placeholder='Username'
+                        placeholder={fieldName}
                     />
                 </div>
                 <div>
                     <button>
-                        Change username
+                        Change {fieldName}
                     </button>
                 </div>
             </form>
