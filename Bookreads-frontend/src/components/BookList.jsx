@@ -58,30 +58,11 @@ const BookList = () => {
         <>
             {!isEdited ?
                 <div>
-                    <BookshelfCategory 
-                        name={`All(${books.length})`}
-                        handleClick={() => setBookshelf(Bookshelf.ALL)}
-                    />
-                    <BookshelfCategory
-                        name={`Read(${calculateLength(Bookshelf.READ)})`} 
-                        handleClick={() => setBookshelf(Bookshelf.READ)}
-                    />
-                    <BookshelfCategory
-                        name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} 
-                        handleClick={() => setBookshelf(Bookshelf.CURRENTLY_READING)}
-                    />
-                    <BookshelfCategory
-                        name={`Want To Read(${calculateLength(Bookshelf.WANT_TO_READ)})`} 
-                        handleClick={() => setBookshelf(Bookshelf.WANT_TO_READ)}
-                    />
-                    
-                    <BookTable 
-                        books={books}
-                        bookshelf={bookshelf} 
-                        userId={userId} 
-                        handleEdit={handleEdit} 
-                        deleteBook={deleteBook}
-                    />
+                    <BookshelfCategory name={`All(${books.length})`} handleClick={() => setBookshelf(Bookshelf.ALL)} />
+                    <BookshelfCategory name={`Read(${calculateLength(Bookshelf.READ)})`} handleClick={() => setBookshelf(Bookshelf.READ)} />
+                    <BookshelfCategory name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} handleClick={() => setBookshelf(Bookshelf.CURRENTLY_READING)} />
+                    <BookshelfCategory name={`Want To Read(${calculateLength(Bookshelf.WANT_TO_READ)})`} handleClick={() => setBookshelf(Bookshelf.WANT_TO_READ)} />
+                    <BookTable books={books} bookshelf={bookshelf} userId={userId} handleEdit={handleEdit} deleteBook={deleteBook}/>
                 </div> :
                 <div>
                     <h1>Edit Book</h1>
