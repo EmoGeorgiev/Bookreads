@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Bookshelf } from '../util/Bookshelf'
-import Book from './Book'
 import BookForm from './BookForm'
+import BookTable from './BookTable'
+import BookshelfCategory from './BookshelfCategory'
 import bookService from '../services/books'
 
 const BookList = () => {
@@ -57,48 +58,30 @@ const BookList = () => {
         <>
             {!isEdited ?
                 <div>
-                    <div>
-                        <button onClick={() => setBookshelf(Bookshelf.ALL)}>
-                            All({books.length})
-                        </button>
-                    </div>
-                    <div>
-                        <button onClick={() => setBookshelf(Bookshelf.READ)}>
-                            Read({calculateLength(Bookshelf.READ)})
-                        </button>
-                    </div>
-                    <div>
-                        <button onClick={() => setBookshelf(Bookshelf.CURRENTLY_READING)}>
-                            Currently Reading({calculateLength(Bookshelf.CURRENTLY_READING)})
-                        </button>
-                    </div>
-                    <div>
-                        <button onClick={() => setBookshelf(Bookshelf.WANT_TO_READ)}>
-                            Want To Read({calculateLength(Bookshelf.WANT_TO_READ)})
-                        </button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Page Count</th>
-                                <th>Rating</th>
-                                <th>Bookshelf</th>
-                                <th>Review</th>
-                                <th>Date Read</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {books
-                                .filter(book => bookshelf === Bookshelf.ALL ? book : book.bookshelf === bookshelf)
-                                .map(book => <Book key={book.id} 
-                                                    book={book} 
-                                                    userId={parseInt(userId)} 
-                                                    handleEdit={handleEdit} 
-                                                    deleteBook={deleteBook} />)}
-                        </tbody>
-                    </table>
+                    <BookshelfCategory 
+                        name={`All(${books.length})`}
+                        handleClick={() => setBookshelf(Bookshelf.ALL)}
+                    />
+                    <BookshelfCategory
+                        name={`Read(${calculateLength(Bookshelf.READ)})`} 
+                        handleClick={() => setBookshelf(Bookshelf.READ)}
+                    />
+                    <BookshelfCategory
+                        name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} 
+                        handleClick={() => setBookshelf(Bookshelf.CURRENTLY_READING)}
+                    />
+                    <BookshelfCategory
+                        name={`Want To Read(${calculateLength(Bookshelf.WANT_TO_READ)})`} 
+                        handleClick={() => setBookshelf(Bookshelf.WANT_TO_READ)}
+                    />
+                    
+                    <BookTable 
+                        books={books}
+                        bookshelf={bookshelf} 
+                        userId={userId} 
+                        handleEdit={handleEdit} 
+                        deleteBook={deleteBook}
+                    />
                 </div> :
                 <div>
                     <h1>Edit Book</h1>

@@ -53,7 +53,8 @@ const BookForm = ({ book, save }) => {
                 <div>
                     <p>Page Count:</p>
                     <input
-                        type='text'
+                        type='number'
+                        min={1}
                         value={pageCount}
                         onChange={({ target }) => setPageCount(target.value)}
                         placeholder={pageCount}
