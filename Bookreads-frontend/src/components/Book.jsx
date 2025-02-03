@@ -1,13 +1,7 @@
-import { useState } from 'react'
 import { useAuth } from './AuthContext'
 
-const Book = ({ book, userId, updateBook, deleteBook }) => {
-    const [isEdited, setIsEdited] = useState(false)
+const Book = ({ book, userId, handleEdit, deleteBook }) => {
     const { user } = useAuth()
-
-    const handleEdit = () => {
-        setIsEdited(!isEdited)
-    }
 
     const handleDelete = () => {
         if (window.confirm('Are you sure you want to delete "' + book.title + '"?')) {
@@ -26,7 +20,7 @@ const Book = ({ book, userId, updateBook, deleteBook }) => {
             <td>{book.dateRead}</td>
             {user.id === userId && 
                 <td>
-                    <button onClick={handleEdit}>
+                    <button onClick={() => handleEdit(book)}>
                         Edit
                     </button>
                 </td>}
