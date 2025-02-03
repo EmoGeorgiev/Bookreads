@@ -22,13 +22,13 @@ const UserList = () => {
         getUsers()
     }, [])
 
-    const handleQueryChange = (e) => {
+    const handleQueryChange = e => {
         const newQuery = e.target.value.toLowerCase()
         setQuery(newQuery)
         setFilteredUsers(users.filter(user => user.username.toLowerCase().includes(newQuery)))
     }
 
-    const handleClear = (e) => {
+    const handleClear = e => {
         e.preventDefault()
         setQuery('')
         setFilteredUsers(users)

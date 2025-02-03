@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
         loadUser()
     }, [])
 
-    const login = (data) => {
+    const login = data => {
         const localStorageUser = {
             'username': data.username,
             'id': data.id

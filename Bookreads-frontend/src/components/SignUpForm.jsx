@@ -8,7 +8,7 @@ const SignUpForm = () => {
     const [email, setEmail] = useState('')
     const navigate = useNavigate()
     
-    const handleSignUp = async (e) => {
+    const handleSignUp = async e => {
         e.preventDefault()
 
         const credentials = {

@@ -12,7 +12,7 @@ const BookForm = ({ book, save }) => {
     const [dateRead, setDateRead] = useState(book.dateRead)
     const { user } = useAuth()
 
-    const handleSave = (e) => {
+    const handleSave = e => {
         e.preventDefault()
 
         const newBook = {

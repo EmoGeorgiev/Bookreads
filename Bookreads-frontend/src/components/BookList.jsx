@@ -49,7 +49,7 @@ const BookList = () => {
         setIsEdited(!isEdited)
     }
 
-    const calculateLength = (bookshelf) => {
+    const calculateLength = bookshelf => {
         return books.filter(book => book.bookshelf === bookshelf).length
     }
 

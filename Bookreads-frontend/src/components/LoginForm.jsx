@@ -9,7 +9,7 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const { login } = useAuth()
 
-    const handleLogin = async (e) => {
+    const handleLogin = async e => {
         e.preventDefault()
 
         try {
