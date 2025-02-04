@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import loginService from '../../services/login'
  
@@ -28,31 +28,52 @@ const LoginForm = () => {
 
     return (
         <div>
-            <h1>Bookreads</h1>
-            <h1>Log in</h1>
-
-            <form onSubmit={handleLogin}>
+            <h1 className="m-5 text-5xl text-center font-bold">Bookreads</h1>
+            <h1 className="text-4xl text-center font-serif">Log in</h1>
+            <div className="mt-16 flex flex-col items-center">
+                <form onSubmit={handleLogin}>
+                    <div className="flex flex-col">
+                        <label htmlFor='username' className="ml-5 font-semibold">
+                            Username
+                        </label>
+                        <input 
+                            className="w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl"
+                            type='text'
+                            id='username'
+                            value={username}
+                            name='username'
+                            onChange={({ target }) => setUsername(target.value)}
+                            placeholder='Username'
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor='password' className="ml-5  font-semibold">
+                            Password
+                        </label>
+                        <input
+                            className="w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl"
+                            type='password'
+                            id='password'
+                            value={password}
+                            name='password'
+                            onChange={({ target }) => setPassword(target.value)}
+                            placeholder='Password'
+                        />
+                    </div>
+                    <button className="w-80 p-1.5 m-5 hover:bg-neutral-700 bg-black text-white text-xl font-semibold rounded-4xl">
+                        Log in
+                    </button>
+                </form>
                 <div>
-                    <input 
-                        type='text'
-                        value={username}
-                        name='username'
-                        onChange={({ target }) => setUsername(target.value)}
-                        placeholder='Username'
-                    />
+                    <p className="text-lg text-center font-semibold">
+                        New to Bookreads?
+                    </p>
+                    <button className="w-80 p-1.5 m-5 hover:bg-gray-200 border text-xl font-semibold rounded-4xl"
+                            onClick={() => navigate('/signup')}>
+                        Sign up
+                    </button>
                 </div>
-                <div>
-                    <input 
-                        type='password'
-                        value={password}
-                        name='password'
-                        onChange={({ target }) => setPassword(target.value)}
-                        placeholder='Password'
-                    />
-                </div>
-                <button>Log in</button>
-            </form>
-            <p>New to Bookreads? <Link to='/signup'>Sign up</Link></p>
+            </div>
         </div>
     )
 }
