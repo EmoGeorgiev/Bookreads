@@ -6,13 +6,17 @@ const Navigation = () => {
     return (
         <>
             {isAuthenticated && 
-                <nav>
-                    <Link to='/'>Home</Link>
-                    <Link to={`/users/${user.id}/books`}>My Books</Link>
-                    <Link to='/books/add'>Add Book</Link>
-                    <Link to='/users'>Users</Link>
-                    <Link to='/settings'>Settings</Link>
-                    <button onClick={logout}>Log out</button>
+                <nav className='bg-black text-white p-3'>
+                    <div className='flex justify-center space-x-14'>
+                        <Link className='hover:text-gray-400 transition duration-300' to='/'>Home</Link>
+                        <Link className='hover:text-gray-400 transition duration-300' to={`/users/${user.id}/books`}>My Books</Link>
+                        <Link className='hover:text-gray-400 transition duration-300' to='/books/add'>Add Book</Link>
+                        <Link className='hover:text-gray-400 transition duration-300' to='/users'>Users</Link>
+                        <Link className='hover:text-gray-400 transition duration-300' to='/settings'>Settings</Link>
+                        <button className='hover:text-gray-400 transition duration-300' onClick={logout}>
+                            Log out
+                        </button>
+                    </div>
                 </nav>
             }   
         </>
