@@ -18,7 +18,7 @@ const AddBook = () => {
 
     return (
         <div>
-            <h1>Add Book</h1>
+            <h1 className='m-10 text-4xl text-center font-semibold'>Add Book</h1>
             <BookForm book={{ 
                     'title': '', 
                     'author': '', 
@@ -26,7 +26,7 @@ const AddBook = () => {
                     'rating': '', 
                     'bookshelf': 'READ', 
                     'review': '', 
-                    'dateRead': '' }} save={addBook} />
+                    'dateRead': '' }} save={addBook} handleCancel={() => window.location.reload()} />
         </div>
     )
 }

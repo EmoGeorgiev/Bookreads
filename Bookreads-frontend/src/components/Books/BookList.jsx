@@ -82,9 +82,9 @@ const BookList = () => {
                     <BookTable books={filteredBooks} bookshelf={bookshelf} userId={userId} handleEdit={handleEdit} deleteBook={deleteBook}/>
                 </div> :
                 <div>
-                    <h1>Edit Book</h1>
-                    <BookForm book={editedBook} save={updateBook} />
-                    <button onClick={() => handleEdit(null)}>Cancel</button>
+                    
+                    <h1 className='m-10 text-4xl text-center font-semibold'>Edit Book</h1>
+                    <BookForm book={editedBook} save={updateBook} handleCancel={() => handleEdit(null)} />
                 </div>}
         </div>
     )
