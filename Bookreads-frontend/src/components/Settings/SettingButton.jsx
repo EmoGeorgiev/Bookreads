@@ -5,7 +5,7 @@ const SettingButton = ({ currentSetting, setting, handleSettingChange }) => {
     return (
         <button className={currentSetting === setting ? clickedSettingStyle : notClickedSettingStyle}
             onClick={() => handleSettingChange(setting)}>
-            {setting} Change
+            {setting}
         </button>
     )
 }

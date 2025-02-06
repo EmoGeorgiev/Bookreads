@@ -8,10 +8,10 @@ import DeleteAccount from './DeleteAccount'
 import userService from '../../services/users'
 
 const SettingsValues = Object.freeze({
-    CHANGE_USERNAME: 'Username',
-    CHANGE_EMAIL: 'Email',
-    CHANGE_PASSWORD: 'Password',
-    DELETE_ACCOUNT: 'Delete'
+    CHANGE_USERNAME: 'Username Change',
+    CHANGE_EMAIL: 'Email Change',
+    CHANGE_PASSWORD: 'Password Change',
+    DELETE_ACCOUNT: 'Delete Account'
 })
 
 const Settings = () => {
