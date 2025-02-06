@@ -47,21 +47,6 @@ const SignUpForm = () => {
                             value={username}
                             name='username'
                             onChange={({ target }) => setUsername(target.value)}
-                            placeholder='Username'
-                        />
-                    </div>
-                    <div className='flex flex-col'>
-                        <label htmlFor='password' className='ml-5 font-semibold'>
-                            Password
-                        </label>
-                        <input
-                            className='w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl' 
-                            type='password'
-                            id='password'
-                            value={password}
-                            name='password'
-                            onChange={({ target }) => setPassword(target.value)}
-                            placeholder='Password'
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -75,7 +60,19 @@ const SignUpForm = () => {
                             value={email}
                             name='email'
                             onChange={({ target }) => setEmail(target.value)}
-                            placeholder='Email'
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label htmlFor='password' className='ml-5 font-semibold'>
+                            Password
+                        </label>
+                        <input
+                            className='w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl' 
+                            type='password'
+                            id='password'
+                            value={password}
+                            name='password'
+                            onChange={({ target }) => setPassword(target.value)}
                         />
                     </div>
                     <button className='w-80 p-1.5 m-5 hover:bg-neutral-700 bg-black text-white text-xl font-semibold rounded-4xl'>

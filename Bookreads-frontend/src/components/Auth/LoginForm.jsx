@@ -43,7 +43,6 @@ const LoginForm = () => {
                             value={username}
                              name='username'
                             onChange={({ target }) => setUsername(target.value)}
-                            placeholder='Username'
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -57,7 +56,6 @@ const LoginForm = () => {
                             value={password}
                             name='password'
                             onChange={({ target }) => setPassword(target.value)}
-                            placeholder='Password'
                         />
                     </div>
                     <button className='w-80 p-1.5 m-5 hover:bg-neutral-700 bg-black text-white text-xl font-semibold rounded-4xl'>

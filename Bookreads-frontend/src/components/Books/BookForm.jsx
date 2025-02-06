@@ -34,7 +34,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
             <form onSubmit={handleSave}>
                 <div className='flex'>
                     <div className='flex flex-col items-center'>
-                        <label htmlFor='title' className='ml-5 font-semibold'>
+                        <label htmlFor='title' className='font-semibold'>
                             Title:
                         </label>
                         <input
@@ -47,7 +47,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
                         />
                     </div>
                     <div className='flex flex-col items-center'>
-                        <label htmlFor='author' className='ml-5 font-semibold'>
+                        <label htmlFor='author' className='font-semibold'>
                             Author:
                         </label>
                         <input
@@ -63,7 +63,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
                 </div>
                 <div className='flex'>
                     <div className='flex flex-col items-center'>
-                        <label htmlFor='pageCount' className='ml-5 font-semibold'>
+                        <label htmlFor='pageCount' className='font-semibold'>
                             Page Count:
                         </label>
                         <input
@@ -77,7 +77,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
                         />
                     </div>
                     <div className='flex flex-col items-center'>
-                        <label htmlFor='rating' className='ml-5 font-semibold'>
+                        <label htmlFor='rating' className='font-semibold'>
                             Rating:
                         </label>
                         <select className='w-80 p-1.5 m-5 text-center font-mono hover:bg-gray-100 border border-gray-500 rounded-4xl' name='rating' id='rating' value={rating || ''} onChange={({ target }) => setRating(target.value)} placeholder={rating}>
@@ -92,7 +92,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
                 </div>
                 <div className='flex'>
                     <div className='flex flex-col items-center'>
-                        <label htmlFor='bookshelf' className='ml-5 font-semibold'>
+                        <label htmlFor='bookshelf' className='font-semibold'>
                             Bookshelf:
                         </label>
                         <select className='w-80 p-1.5 m-5 text-center font-mono hover:bg-gray-100 border border-gray-500 rounded-4xl' name='bookshelf' id='bookshelf' value={bookshelf} onChange={({ target }) => setBookshelf(target.value)} placeholder={bookshelf}>
@@ -102,7 +102,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
                         </select>
                     </div>
                     <div className='flex flex-col items-center'>
-                        <label htmlFor='dateRead' className='ml-5 font-semibold'>
+                        <label htmlFor='dateRead' className='font-semibold'>
                             Date Read:
                         </label>
                         <input
@@ -116,7 +116,7 @@ const BookForm = ({ book, save, handleCancel  }) => {
                     </div>
                 </div>
                 <div className='flex flex-col items-center'>
-                    <label htmlFor='review' className='ml-5 font-semibold'>
+                    <label htmlFor='review' className='font-semibold'>
                         Review:
                     </label>
                     <textarea className='w-full h-40 p-1.5 m-5 text-center font-mono hover:bg-gray-100 border border-gray-500 rounded-xl' id='review' value={review || ''} onChange={({ target }) => setReview(target.value)}  placeholder={review}>
