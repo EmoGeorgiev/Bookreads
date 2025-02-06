@@ -11,22 +11,24 @@ const Book = ({ book, userId, handleEdit, deleteBook }) => {
     
     return (
         <tr>
-            <td>{book.title}</td>
-            <td>{book.author}</td>
-            <td>{book.pageCount}</td>
-            <td>{book.rating ? `${book.rating}/5` : ''}</td>
-            <td>{book.bookshelf.toLowerCase()}</td>
-            <td>{book.review}</td>
-            <td>{book.dateRead}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.title}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.author}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.pageCount}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.rating ? `${book.rating}/5` : ''}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.bookshelf.toLowerCase()}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.review}</td>
+            <td className='w-48 px-10 py-2 text-lg text-center font-think'>{book.dateRead}</td>
             {user.id === userId && 
                 <td>
-                    <button onClick={() => handleEdit(book)}>
+                    <button className='w-24 mx-2.5 p-1.5 bg-black text-white text-lg hover:bg-neutral-700 font-mono border rounded-4xl'
+                            onClick={() => handleEdit(book)}>
                         Edit
                     </button>
                 </td>}
             {user.id === userId &&
                 <td>
-                    <button onClick={handleDelete}>
+                    <button className='w-24 mx-2.5 p-1.5 bg-red-700 text-white text-lg hover:bg-red-900 font-mono border rounded-4xl'
+                            onClick={handleDelete}>
                         Delete
                     </button>
                 </td>}

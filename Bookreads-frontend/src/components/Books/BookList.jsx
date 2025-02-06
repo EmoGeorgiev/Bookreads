@@ -8,6 +8,7 @@ import bookService from '../../services/books'
 
 const BookList = () => {
     const [books, setBooks] = useState([])
+    const [filteredBooks, setFilteredBooks] = useState([])
     const [bookshelf, setBookshelf] = useState(Bookshelf.ALL)
     const [isEdited, setIsEdited] = useState(false)
     const [editedBook, setEditedBook] = useState(null)
@@ -18,6 +19,7 @@ const BookList = () => {
             try {
                 const newBooks = await bookService.getBooksByUserId(userId)
                 setBooks(newBooks)
+                setFilteredBooks(newBooks)
             } catch (error) {
                 console.log(error)
             }
@@ -29,7 +31,9 @@ const BookList = () => {
     const updateBook = async newBook => {
         try {
             const updatedBook = await bookService.updateBook(newBook.id, newBook)
-            setBooks(books.map(book => book.id === updatedBook.id ? updatedBook : book))
+            const newBooks = books.map(book => book.id === updatedBook.id ? updatedBook : book)
+            setBooks(newBooks)
+            handleFilteredBooks(newBooks, bookshelf)
             setIsEdited(false)    
         } catch (error) {
             console.log(error)
@@ -39,7 +43,9 @@ const BookList = () => {
     const deleteBook = async id => {
         try {
             await bookService.deleteBook(id)
-            setBooks(books.filter(book => book.id !== id))
+            const newBooks = books.filter(book => book.id !== id)
+            setBooks(newBooks)
+            handleFilteredBooks(newBooks, bookshelf)
         } catch (error) {
             console.log(error)
         }
@@ -53,23 +59,34 @@ const BookList = () => {
     const calculateLength = bookshelf => {
         return books.filter(book => book.bookshelf === bookshelf).length
     }
+    
+    const handleFilteredBooks = (newBooks, currentBookshelf) => {
+        setFilteredBooks(newBooks.filter(book => currentBookshelf === Bookshelf.ALL ? book : book.bookshelf === currentBookshelf))
+    }
+
+    const handleBookshelf = newBookshelf => {
+        setBookshelf(newBookshelf)
+        handleFilteredBooks(books, newBookshelf)
+    }
 
     return (
-        <>
+        <div className='mt-5'>
             {!isEdited ?
                 <div>
-                    <BookshelfCategory name={`All(${books.length})`} handleClick={() => setBookshelf(Bookshelf.ALL)} />
-                    <BookshelfCategory name={`Read(${calculateLength(Bookshelf.READ)})`} handleClick={() => setBookshelf(Bookshelf.READ)} />
-                    <BookshelfCategory name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} handleClick={() => setBookshelf(Bookshelf.CURRENTLY_READING)} />
-                    <BookshelfCategory name={`Want To Read(${calculateLength(Bookshelf.WANT_TO_READ)})`} handleClick={() => setBookshelf(Bookshelf.WANT_TO_READ)} />
-                    <BookTable books={books} bookshelf={bookshelf} userId={userId} handleEdit={handleEdit} deleteBook={deleteBook}/>
+                    <div className='flex justify-center'>
+                        <BookshelfCategory name={`All(${books.length})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.ALL} handleBookshelf={handleBookshelf} />
+                        <BookshelfCategory name={`Read(${calculateLength(Bookshelf.READ)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.READ} handleBookshelf={handleBookshelf} />
+                        <BookshelfCategory name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.CURRENTLY_READING} handleBookshelf={handleBookshelf} />
+                        <BookshelfCategory name={`Want To Read(${calculateLength(Bookshelf.WANT_TO_READ)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.WANT_TO_READ} handleBookshelf={handleBookshelf} />
+                    </div>
+                    <BookTable books={filteredBooks} bookshelf={bookshelf} userId={userId} handleEdit={handleEdit} deleteBook={deleteBook}/>
                 </div> :
                 <div>
                     <h1>Edit Book</h1>
                     <BookForm book={editedBook} save={updateBook} />
                     <button onClick={() => handleEdit(null)}>Cancel</button>
                 </div>}
-        </>
+        </div>
     )
 }
 
