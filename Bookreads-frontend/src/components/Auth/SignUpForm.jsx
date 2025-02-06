@@ -37,11 +37,11 @@ const SignUpForm = () => {
             <div className='mt-16 flex flex-col items-center'>
                 <form onSubmit={handleSignUp}>
                     <div className='flex flex-col'>
-                        <label htmlFor='username' className='ml-5 font-semibold'>
+                        <label htmlFor='username' className='ml-5 text-center font-semibold'>
                             Username
                         </label>
                         <input
-                            className='w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl'
+                            className='w-80 p-1.5 m-5 text-center hover:bg-gray-100 border border-gray-500 rounded-4xl'
                             type='text'
                             id='username'
                             value={username}
@@ -50,11 +50,11 @@ const SignUpForm = () => {
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label htmlFor='email' className='ml-5 font-semibold'>
+                        <label htmlFor='email' className='ml-5 text-center font-semibold'>
                             Email
                         </label>
                         <input
-                            className='w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl' 
+                            className='w-80 p-1.5 m-5 text-center hover:bg-gray-100 border border-gray-500 rounded-4xl' 
                             type='email'
                             id='email'
                             value={email}
@@ -63,11 +63,11 @@ const SignUpForm = () => {
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label htmlFor='password' className='ml-5 font-semibold'>
+                        <label htmlFor='password' className='ml- text-center font-semibold'>
                             Password
                         </label>
                         <input
-                            className='w-80 p-1.5 m-5 hover:bg-gray-100 border border-gray-500 rounded-4xl' 
+                            className='w-80 p-1.5 m-5 text-center hover:bg-gray-100 border border-gray-500 rounded-4xl' 
                             type='password'
                             id='password'
                             value={password}
