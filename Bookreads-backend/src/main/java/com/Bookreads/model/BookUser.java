@@ -17,7 +17,7 @@ public class BookUser {
     private String password;
     @Column(nullable = false)
     private String email;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
     public BookUser() {
 
