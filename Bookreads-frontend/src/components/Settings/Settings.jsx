@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Auth/AuthContext'
 import SettingButton from './SettingButton'
 import ChangeField from './ChangeField'
@@ -17,8 +16,7 @@ const SettingsValues = Object.freeze({
 const Settings = () => {
     const [currentSetting, setCurrentSetting] = useState(SettingsValues.CHANGE_USERNAME)
     const [currentUser, setCurrentUser] = useState({'username': ' ','email': '','id': -1})
-    const { user } = useAuth()
-    const navigate = useNavigate()
+    const { user, logout } = useAuth()
 
     useEffect(() => { 
         const getUser = async () => {
@@ -63,7 +61,7 @@ const Settings = () => {
     const deleteAccount = async () => {
         try {
             await userService.deleteUser(currentUser.id)
-            navigate('/login')
+            logout()
         } catch (error) {
             console.log(error)
         }
