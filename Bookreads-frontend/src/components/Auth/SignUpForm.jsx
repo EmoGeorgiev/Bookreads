@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import signupService from '../../services/signup'
+import { defaultSignUpErrors } from '../../util/Errors'
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
+    const [errors, setErrors] = useState(defaultSignUpErrors)
     const navigate = useNavigate()
     
     const handleSignUp = async e => {
@@ -26,7 +28,14 @@ const SignUpForm = () => {
                 navigate('/login')
             }
         } catch (error) {
-            console.log(error)
+            if (error.status === 400) {
+                setErrors({ ...errors, ...error.response.data})
+            } else if (error.status === 409) {
+                setErrors({ ...errors, ...error.response.data, 'username': 'Username already exists'})
+            }
+            setTimeout(() => {
+                setErrors(defaultSignUpErrors)
+            }, 3000)
         }
     }
 
@@ -48,6 +57,9 @@ const SignUpForm = () => {
                             name='username'
                             onChange={({ target }) => setUsername(target.value)}
                         />
+                        <div className='text-center text-red-700'>
+                            {errors.username}
+                        </div>
                     </div>
                     <div className='flex flex-col'>
                         <label htmlFor='email' className='ml-5 text-center font-semibold'>
@@ -61,6 +73,9 @@ const SignUpForm = () => {
                             name='email'
                             onChange={({ target }) => setEmail(target.value)}
                         />
+                        <div className='text-center text-red-700'>
+                            {errors.email}
+                        </div>
                     </div>
                     <div className='flex flex-col'>
                         <label htmlFor='password' className='ml- text-center font-semibold'>
@@ -74,6 +89,9 @@ const SignUpForm = () => {
                             name='password'
                             onChange={({ target }) => setPassword(target.value)}
                         />
+                        <div className='text-center text-red-700'>
+                            {errors.password}
+                        </div>
                     </div>
                     <button className='w-80 p-1.5 m-5 hover:bg-neutral-700 bg-black text-white text-xl font-semibold rounded-4xl'>
                         Create account

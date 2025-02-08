@@ -5,7 +5,6 @@ import SettingButton from './SettingButton'
 import ChangeField from './ChangeField'
 import ChangePassword from './ChangePassword'
 import DeleteAccount from './DeleteAccount'
-import Error from '../Error/Error'
 import userService from '../../services/users'
 
 const SettingsValues = Object.freeze({
@@ -99,9 +98,6 @@ const Settings = () => {
                 {currentSetting === SettingsValues.CHANGE_EMAIL && <ChangeField fieldName={'Email'} fieldValue={currentUser.email} fieldChange={emailChange} />}
                 {currentSetting === SettingsValues.CHANGE_PASSWORD && <ChangePassword passwordChange={passwordChange} />}
                 {currentSetting === SettingsValues.DELETE_ACCOUNT && <DeleteAccount deleteAccount={deleteAccount} />}
-            </div>
-            <div>
-                <Error />
             </div>
         </div>
     )

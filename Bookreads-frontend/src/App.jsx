@@ -8,6 +8,7 @@ import BookList from './components/Books/BookList'
 import AddBook from './components/Books/AddBook'
 import UserList from './components/Users/UserList'
 import Settings from './components/Settings/Settings'
+import Error from './components/Error/Error'
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/users' element={<ProtectedRoute><UserList /></ProtectedRoute>} />
         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       </Routes>
+      <Error />
     </>
   )
 }

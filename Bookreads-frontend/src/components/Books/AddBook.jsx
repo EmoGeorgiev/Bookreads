@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Auth/AuthContext'
 import BookForm from './BookForm'
 import bookService from '../../services/books'
+import { defaultBookErrors } from '../../util/Errors'
 
 const AddBook = () => {
+    const [errors, setErrors] = useState(defaultBookErrors)
     const { user } = useAuth()
     const navigate = useNavigate()
 
@@ -12,7 +15,14 @@ const AddBook = () => {
             await bookService.addBook(book)
             navigate(`/users/${user.id}/books`)
         } catch (error) {
-            console.log(error)
+            if (error.status === 400) {
+                setErrors({ ...errors, ...error.response.data})
+            } else if (error.status === 409) {
+                setErrors({ ...errors, ...error.response.data, 'title': error.response.data.message})
+            }
+            setTimeout(() => {
+                setErrors(defaultBookErrors)
+            }, 3000)
         }
     }
 
@@ -26,7 +36,7 @@ const AddBook = () => {
                     'rating': '', 
                     'bookshelf': 'READ', 
                     'review': '', 
-                    'dateRead': '' }} save={addBook} handleCancel={() => window.location.reload()} />
+                    'dateRead': '' }} save={addBook} handleCancel={() => window.location.reload()} errors={errors} />
         </div>
     )
 }

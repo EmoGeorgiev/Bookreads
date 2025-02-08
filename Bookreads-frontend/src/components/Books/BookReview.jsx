@@ -1,7 +1,7 @@
 const BookReview = ({ book, handleViewReview }) => {
     return (
         <div>
-            <h1 className='m-10 text-center text-4xl font-semibold'>Review of {book.title} by {book.author}</h1>
+            <h1 className='m-10 text-center text-4xl font-semibold'>Review of &quot;{book.title}&quot; by {book.author}</h1>
             <div className='text-center text-2xl font-mono'>
                 {book.review}
             </div>

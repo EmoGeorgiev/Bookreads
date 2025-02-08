@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../Auth/AuthContext'
 import { Bookshelf } from '../../util/Bookshelf'
 
-const BookForm = ({ book, save, handleCancel  }) => {
+const BookForm = ({ book, save, handleCancel, errors  }) => {
     const [title, setTitle] = useState(book.title)
     const [author, setAuthor] = useState(book.author)
     const [pageCount, setPageCount] = useState(book.pageCount)
@@ -45,6 +45,9 @@ const BookForm = ({ book, save, handleCancel  }) => {
                             onChange={({ target }) => setTitle(target.value)}
                             placeholder={title}
                         />
+                        <div className='text-center text-red-700'>
+                            {errors.title}
+                        </div>
                     </div>
                     <div className='flex flex-col items-center'>
                         <label htmlFor='author' className='font-semibold'>
@@ -58,6 +61,9 @@ const BookForm = ({ book, save, handleCancel  }) => {
                             onChange={({ target }) => setAuthor(target.value)}
                             placeholder={author}
                         />
+                        <div className='text-center text-red-700'>
+                            {errors.author}
+                        </div>
                     </div>
                     
                 </div>
@@ -75,6 +81,9 @@ const BookForm = ({ book, save, handleCancel  }) => {
                             onChange={({ target }) => setPageCount(target.value)}
                             placeholder={pageCount}
                         />
+                        <div className='text-center text-red-700'>
+                            {errors.pageCount}
+                        </div>
                     </div>
                     <div className='flex flex-col items-center'>
                         <label htmlFor='rating' className='font-semibold'>

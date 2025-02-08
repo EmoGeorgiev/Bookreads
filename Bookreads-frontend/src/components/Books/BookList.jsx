@@ -6,6 +6,7 @@ import BookReview from './BookReview'
 import BookTable from './BookTable'
 import BookshelfCategory from './BookshelfCategory'
 import bookService from '../../services/books'
+import { defaultBookErrors } from '../../util/Errors'
 
 const BookList = () => {
     const [books, setBooks] = useState([])
@@ -14,6 +15,7 @@ const BookList = () => {
     const [bookshelf, setBookshelf] = useState(Bookshelf.ALL)
     const [showEdited, setShowEdited] = useState(false)
     const [showReview, setShowReview] = useState(false)
+    const [errors, setErrors] = useState(defaultBookErrors)
     const { userId } = useParams()
 
     useEffect(() => {
@@ -38,7 +40,10 @@ const BookList = () => {
             handleFilteredBooks(newBooks, bookshelf)
             setShowEdited(false)    
         } catch (error) {
-            console.log(error)
+            setErrors({ ...errors, ...error.response.data})
+            setTimeout(() => {
+                setErrors(defaultBookErrors)
+            }, 3000)
         }
     }
 
@@ -80,7 +85,7 @@ const BookList = () => {
         return (
             <div>
                 <h1 className='m-10 text-4xl text-center font-semibold'>Edit Book</h1>
-                <BookForm book={currentBook} save={updateBook} handleCancel={() => handleEdit(null)} />
+                <BookForm book={currentBook} save={updateBook} handleCancel={() => handleEdit(null)} errors={errors} />
             </div>  
         )
     } else if (showReview) {
@@ -92,7 +97,7 @@ const BookList = () => {
     } else {
         return (
             <div>
-                <div className='flex justify-center'>
+                <div className='mt-10 flex justify-center'>
                     <BookshelfCategory name={`All(${books.length})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.ALL} handleBookshelf={handleBookshelf} />
                     <BookshelfCategory name={`Read(${calculateLength(Bookshelf.READ)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.READ} handleBookshelf={handleBookshelf} />
                     <BookshelfCategory name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.CURRENTLY_READING} handleBookshelf={handleBookshelf} />

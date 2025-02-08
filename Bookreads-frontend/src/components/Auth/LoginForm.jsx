@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext'
-import Error from '../Error/Error'
 import { useError } from '../Error/ErrorContext'
 import loginService from '../../services/login'
  
@@ -64,7 +63,6 @@ const LoginForm = () => {
                     <button className='w-80 p-1.5 m-5 hover:bg-neutral-700 bg-black text-white text-xl font-semibold rounded-4xl'>
                         Log in
                     </button>
-                    <Error />
                 </form>
                 <div>
                     <p className='text-lg text-center font-semibold'>
