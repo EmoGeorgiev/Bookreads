@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext'
+import Error from '../Error/Error'
+import { useError } from '../Error/ErrorContext'
 import loginService from '../../services/login'
  
 const LoginForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
+    const { triggerError } = useError()
     const { login } = useAuth()
 
     const handleLogin = async e => {
@@ -22,7 +25,7 @@ const LoginForm = () => {
             setPassword('')
             navigate('/')
         } catch (error) {
-            console.log(error)
+            triggerError('Wrong username or password')
         }
     }
 
@@ -61,6 +64,7 @@ const LoginForm = () => {
                     <button className='w-80 p-1.5 m-5 hover:bg-neutral-700 bg-black text-white text-xl font-semibold rounded-4xl'>
                         Log in
                     </button>
+                    <Error />
                 </form>
                 <div>
                     <p className='text-lg text-center font-semibold'>

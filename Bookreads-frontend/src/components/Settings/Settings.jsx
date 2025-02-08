@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../Auth/AuthContext'
+import { useError } from '../Error/ErrorContext'
 import SettingButton from './SettingButton'
 import ChangeField from './ChangeField'
 import ChangePassword from './ChangePassword'
 import DeleteAccount from './DeleteAccount'
+import Error from '../Error/Error'
 import userService from '../../services/users'
 
 const SettingsValues = Object.freeze({
@@ -17,6 +19,7 @@ const Settings = () => {
     const [currentSetting, setCurrentSetting] = useState(SettingsValues.CHANGE_USERNAME)
     const [currentUser, setCurrentUser] = useState({'username': ' ','email': '','id': -1})
     const { user, logout } = useAuth()
+    const { triggerError } = useError()
 
     useEffect(() => { 
         const getUser = async () => {
@@ -36,7 +39,7 @@ const Settings = () => {
             const updatedUser = await userService.updateUser(currentUser.id, { ...currentUser, 'username': newUsername})
             setCurrentUser(updatedUser)
         } catch (error) {
-            console.log(error)
+            triggerError(error.response.data.username)
         }
     }
 
@@ -45,7 +48,7 @@ const Settings = () => {
             const updatedUser = await userService.updateUser(currentUser.id, { ...currentUser, 'email': newEmail})
             setCurrentUser(updatedUser)
         } catch (error) {
-            console.log(error)
+            triggerError(error.response.data.email)
         }
     }
 
@@ -54,7 +57,17 @@ const Settings = () => {
             const updatedUser = await userService.updatePassword(currentUser.id, { oldPassword, newPassword })
             setCurrentUser(updatedUser)
         } catch (error) {
-            console.log(error)
+            let passwordError;
+            if (error.response.data.oldPassword) {
+                if (error.response.data.newPassword) {
+                    passwordError = error.response.data.oldPassword + '. ' + error.response.data.newPassword
+                } else {
+                    passwordError = error.response.data.oldPassword
+                }
+            } else {
+                passwordError = error.response.data.newPassword
+            }
+            triggerError(passwordError)
         }
     }
 
@@ -86,6 +99,9 @@ const Settings = () => {
                 {currentSetting === SettingsValues.CHANGE_EMAIL && <ChangeField fieldName={'Email'} fieldValue={currentUser.email} fieldChange={emailChange} />}
                 {currentSetting === SettingsValues.CHANGE_PASSWORD && <ChangePassword passwordChange={passwordChange} />}
                 {currentSetting === SettingsValues.DELETE_ACCOUNT && <DeleteAccount deleteAccount={deleteAccount} />}
+            </div>
+            <div>
+                <Error />
             </div>
         </div>
     )
