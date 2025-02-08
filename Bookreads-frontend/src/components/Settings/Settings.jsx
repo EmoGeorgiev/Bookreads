@@ -51,7 +51,7 @@ const Settings = () => {
 
     const passwordChange = async (oldPassword, newPassword) => {
         try {
-            const updatedUser = await userService.updatePassword(currentUser.id, oldPassword, newPassword)
+            const updatedUser = await userService.updatePassword(currentUser.id, { oldPassword, newPassword })
             setCurrentUser(updatedUser)
         } catch (error) {
             console.log(error)

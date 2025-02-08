@@ -2,6 +2,7 @@ package com.Bookreads.controller;
 
 
 import com.Bookreads.dto.SignUpDto;
+import com.Bookreads.dto.UpdatePasswordDto;
 import com.Bookreads.dto.UserDto;
 import com.Bookreads.service.JpaUserDetailsService;
 import com.Bookreads.service.UserService;
@@ -51,8 +52,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}/password")
-    public ResponseEntity<UserDto> updatePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword) {
-        UserDto updatedUser = userDetailsService.updatePassword(id, oldPassword, newPassword);
+    public ResponseEntity<UserDto> updatePassword(@PathVariable Long id, @RequestBody @Valid UpdatePasswordDto updatePasswordDto) {
+        UserDto updatedUser = userDetailsService.updatePassword(id, updatePasswordDto.oldPassword(), updatePasswordDto.newPassword());
         return ResponseEntity.ok()
                 .body(updatedUser);
     }

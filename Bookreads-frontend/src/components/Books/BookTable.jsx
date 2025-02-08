@@ -5,7 +5,7 @@ const BookTable = ({ books, userId, handleEdit, deleteBook }) => {
         <div>
             {books.length === 0 ?
                 <div className='mt-24 text-2xl text-red-500 text-center font-mono'>
-                    There are no books in this category 
+                    There are no books in this category.
                 </div> :
                 <table className='mt-16 min-w-full'>
                 <thead>
