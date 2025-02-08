@@ -6,7 +6,7 @@ const Navigation = () => {
     return (
         <>
             {isAuthenticated && 
-                <nav className='bg-black text-white p-3'>
+                <nav className='top-0 sticky bg-black text-white p-3'>
                     <div className='flex justify-center space-x-14'>
                         <Link className='hover:text-gray-400 transition duration-300' to='/'>Home</Link>
                         <Link className='hover:text-gray-400 transition duration-300' to={`/users/${user.id}/books`}>My Books</Link>

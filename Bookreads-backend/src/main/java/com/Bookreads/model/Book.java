@@ -21,7 +21,7 @@ public class Book {
     private Integer pageCount;
     @Column(nullable = true)
     private Integer rating;
-    @Column(nullable = true)
+    @Column(nullable = true, length = 5000)
     private String review;
     @Column(nullable = true)
     private LocalDate dateRead;
