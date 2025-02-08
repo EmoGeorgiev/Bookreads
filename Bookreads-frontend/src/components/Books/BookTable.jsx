@@ -1,6 +1,6 @@
 import Book from './Book'
 
-const BookTable = ({ books, userId, handleEdit, deleteBook }) => {
+const BookTable = ({ books, userId, handleViewReview, handleEdit, deleteBook }) => {
     return (
         <div>
             {books.length === 0 ?
@@ -15,15 +15,16 @@ const BookTable = ({ books, userId, handleEdit, deleteBook }) => {
                         <th className='w-48 py-4 text-2xl font-mono'>Page Count</th>
                         <th className='w-48 py-4 text-2xl font-mono'>Rating</th>
                         <th className='w-48 py-4 text-2xl font-mono'>Bookshelf</th>
-                        <th className='w-48 py-4 text-2xl font-mono'>Review</th>
                         <th className='w-48 py-4 text-2xl font-mono'>Date Read</th>
+                        <th className='w-48 py-4 text-2xl font-mono'>Review</th>
                     </tr>
                 </thead>
                 <tbody>
                     {books
                         .map(book => <Book key={book.id} 
                                             book={book} 
-                                            userId={parseInt(userId)} 
+                                            userId={parseInt(userId)}
+                                            handleViewReview={handleViewReview}
                                             handleEdit={handleEdit} 
                                             deleteBook={deleteBook} />)}
                 </tbody>
