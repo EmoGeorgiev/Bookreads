@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Bookshelf } from '../../util/Bookshelf'
 import BookForm from './BookForm'
 import BookReview from './BookReview'
@@ -7,6 +7,7 @@ import BookTable from './BookTable'
 import BookshelfCategory from './BookshelfCategory'
 import bookService from '../../services/books'
 import { defaultBookErrors } from '../../util/Errors'
+import { useAuth } from '../Auth/AuthContext'
 
 const BookList = () => {
     const [books, setBooks] = useState([])
@@ -16,7 +17,11 @@ const BookList = () => {
     const [showEdited, setShowEdited] = useState(false)
     const [showReview, setShowReview] = useState(false)
     const [errors, setErrors] = useState(defaultBookErrors)
+   
     const { userId } = useParams()
+    const id = parseInt(userId)
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getBooks = async () => {
@@ -103,7 +108,12 @@ const BookList = () => {
                     <BookshelfCategory name={`Currently Reading(${calculateLength(Bookshelf.CURRENTLY_READING)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.CURRENTLY_READING} handleBookshelf={handleBookshelf} />
                     <BookshelfCategory name={`Want To Read(${calculateLength(Bookshelf.WANT_TO_READ)})`} currentBookshelf={bookshelf} bookshelf={Bookshelf.WANT_TO_READ} handleBookshelf={handleBookshelf} />
                 </div>
-                <BookTable books={filteredBooks} bookshelf={bookshelf} userId={userId} handleViewReview={handleViewReview} handleEdit={handleEdit} deleteBook={deleteBook}/>
+                {user.id === id && 
+                    <button className='w-32 p-1.5 mt-10 mx-auto block bg-black text-white text-lg hover:bg-neutral-700 font-mono border rounded-4xl'
+                            onClick={() => navigate('/books/add')}>
+                        Add Book
+                    </button>}
+                <BookTable books={filteredBooks} bookshelf={bookshelf} userId={id} handleViewReview={handleViewReview} handleEdit={handleEdit} deleteBook={deleteBook}/>
             </div>
         )
     }

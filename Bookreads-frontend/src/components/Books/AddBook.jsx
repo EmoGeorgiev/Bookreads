@@ -13,7 +13,7 @@ const AddBook = () => {
     const addBook = async book => {
         try {
             await bookService.addBook(book)
-            navigate(`/users/${user.id}/books`)
+            handleNavigation()
         } catch (error) {
             if (error.status === 400) {
                 setErrors({ ...errors, ...error.response.data})
@@ -26,6 +26,10 @@ const AddBook = () => {
         }
     }
 
+    const handleNavigation = () => {
+        navigate(`/users/${user.id}/books`)
+    }
+
     return (
         <div>
             <h1 className='m-10 text-4xl text-center font-semibold'>Add Book</h1>
@@ -36,7 +40,7 @@ const AddBook = () => {
                     'rating': '', 
                     'bookshelf': 'READ', 
                     'review': '', 
-                    'dateRead': '' }} save={addBook} handleCancel={() => window.location.reload()} errors={errors} />
+                    'dateRead': '' }} save={addBook} handleCancel={handleNavigation} errors={errors} />
         </div>
     )
 }

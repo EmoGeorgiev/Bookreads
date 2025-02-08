@@ -23,7 +23,7 @@ const BookTable = ({ books, userId, handleViewReview, handleEdit, deleteBook }) 
                     {books
                         .map(book => <Book key={book.id} 
                                             book={book} 
-                                            userId={parseInt(userId)}
+                                            userId={userId}
                                             handleViewReview={handleViewReview}
                                             handleEdit={handleEdit} 
                                             deleteBook={deleteBook} />)}
