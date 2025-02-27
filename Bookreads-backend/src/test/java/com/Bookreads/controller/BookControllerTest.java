@@ -23,6 +23,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(BookController.class)
 public class BookControllerTest {
@@ -93,5 +94,18 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.userId").value(bookDto.userId()));
 
         verify(bookService).addBook(bookDto);
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldReturnBadRequestWhenFieldIsInvalid() throws Exception {
+        BookDto bookDto = new BookDto(1L, "", "Stephen King", 1000, 5, "", null, Bookshelf.READ,1L);
+
+        mockMvc.perform(post("/api/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(bookDto))
+                        .with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title").value("Title must be between 1 and 100 characters"));
     }
 }
