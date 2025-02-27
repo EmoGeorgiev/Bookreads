@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+import static com.Bookreads.constants.ErrorMessages.*;
+
 @Entity
 @Table(name = "books")
 public class Book {
@@ -66,7 +68,7 @@ public class Book {
 
     public void setPageCount(Integer pageCount) {
         if (pageCount <= 0) {
-            throw new PageCountCannotBeLessThanOneException("Page count cannot be less than 1");
+            throw new PageCountCannotBeLessThanOneException(PAGE_COUNT_CANNOT_BE_LESS_THAN_ONE);
         }
         this.pageCount = pageCount;
     }
@@ -80,7 +82,7 @@ public class Book {
             return;
         }
         if (rating <= 0 || rating > 5) {
-            throw new RatingMustBeBetweenOneAndFiveException("Rating must be between 1 and 5");
+            throw new RatingMustBeBetweenOneAndFiveException(RATING_MUST_BE_BETWEEN_ONE_AND_FIVE);
         }
         this.rating = rating;
     }

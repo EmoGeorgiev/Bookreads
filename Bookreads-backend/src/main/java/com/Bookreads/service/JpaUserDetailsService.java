@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.Bookreads.constants.ErrorMessages.*;
+
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
@@ -29,7 +31,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         BookUser user = UserMapper.signUpDtoToUser(signUpDto);
 
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new UsernameAlreadyExistsException("The username : " + user.getUsername() + " already exists");
+            throw new UsernameAlreadyExistsException(USERNAME_ALREADY_EXISTS);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -39,10 +41,10 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     public UserDto updatePassword(Long id, String oldPassword, String newPassword) {
         BookUser user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new PasswordsDoNotMatchException("The passwords do not match");
+            throw new PasswordsDoNotMatchException(PASSWORDS_DO_NOT_MATCH);
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -54,6 +56,6 @@ public class JpaUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .map(SecurityUser::new)
-                .orElseThrow(() -> new UsernameNotFoundException("There does not exist a user with the username : " + username));
+                .orElseThrow(() -> new UsernameNotFoundException(USERNAME_DOES_NOT_EXIST));
     }
 }

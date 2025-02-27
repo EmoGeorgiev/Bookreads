@@ -1,5 +1,6 @@
 package com.Bookreads.service;
 
+import com.Bookreads.constants.ErrorMessages;
 import com.Bookreads.dto.UserDto;
 import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.mapper.UserMapper;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.Bookreads.constants.ErrorMessages.USER_NOT_FOUND_MESSAGE;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -18,10 +21,17 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDto getUser(Long id) {
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
+    public BookUser getUserEntity(Long id) {
         return userRepository.findById(id)
-                .map(UserMapper::userToUserDto)
-                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+    }
+
+    public UserDto getUser(Long id) {
+        return UserMapper.userToUserDto(getUserEntity(id));
     }
 
     public List<UserDto> getUsers() {
@@ -33,7 +43,7 @@ public class UserService {
 
     public UserDto updateUser(Long id, UserDto userDto) {
         BookUser oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         oldUser.setUsername(userDto.username());
         oldUser.setEmail(userDto.email());
@@ -44,7 +54,7 @@ public class UserService {
 
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("There does not exist a user with such an id");
+            throw new UserNotFoundException(USER_NOT_FOUND_MESSAGE);
         }
         userRepository.deleteById(id);
     }

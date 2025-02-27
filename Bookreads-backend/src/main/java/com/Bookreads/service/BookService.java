@@ -8,28 +8,28 @@ import com.Bookreads.mapper.BookMapper;
 import com.Bookreads.model.Book;
 import com.Bookreads.model.BookUser;
 import com.Bookreads.repository.BookRepository;
-import com.Bookreads.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.Bookreads.constants.ErrorMessages.*;
 
 @Service
 public class BookService {
     private final BookRepository bookRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public BookService(BookRepository bookRepository, UserRepository userRepository) {
+    public BookService(BookRepository bookRepository, UserService userService) {
         this.bookRepository = bookRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<BookDto> getBooksByUserId(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException("There does not exist such a user");
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException(USER_NOT_FOUND_MESSAGE);
         }
 
         return bookRepository.findByUserId(userId)
@@ -39,13 +39,12 @@ public class BookService {
                 .collect(Collectors.toList());
     }
     public BookDto addBook(BookDto bookDto) {
-        BookUser user =  userRepository.findById(bookDto.userId())
-                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+        BookUser user =  userService.getUserEntity(bookDto.userId());
 
         Optional<Book> optionalBook = bookRepository.findByTitleAndUserId(bookDto.title(), bookDto.userId());
         if (optionalBook.isPresent()
                 && optionalBook.get().getAuthor().equals(bookDto.author())) {
-            throw new BookAlreadyExistsException("This book has already been added");
+            throw new BookAlreadyExistsException(BOOK_ALREADY_EXISTS_MESSAGE);
         }
 
         Book book = BookMapper.bookDtoToBook(bookDto);
@@ -57,10 +56,9 @@ public class BookService {
 
     public BookDto updateBook(Long id, BookDto bookDto) {
         Book oldBook = bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException("There does not exist a book with such an id"));
+                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE));
 
-        BookUser user =  userRepository.findById(bookDto.userId())
-                .orElseThrow(() -> new UserNotFoundException("There does not exist a user with such an id"));
+        BookUser user =  userService.getUserEntity(bookDto.userId());
 
         oldBook.setTitle(bookDto.title());
         oldBook.setAuthor(bookDto.author());
@@ -77,7 +75,7 @@ public class BookService {
 
     public void deleteBook(Long id) {
         if (!bookRepository.existsById(id)) {
-            throw new BookNotFoundException("There does not exist a book with such an id");
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE);
         }
         bookRepository.deleteById(id);
     }
