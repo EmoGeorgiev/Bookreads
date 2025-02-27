@@ -40,9 +40,9 @@ public class BookControllerTest {
 
     @BeforeEach
     public void init() {
-        validBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ,1L);
-        invalidTitleBookDto = new BookDto(1L, "   ", "Stephen King", 1000, 5, "", null, Bookshelf.READ,1L);
-        invalidUserIdBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ,-1L);
+        validBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
+        invalidTitleBookDto = new BookDto(1L, "   ", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
+        invalidUserIdBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, -1L);
     }
 
     @Test
@@ -186,7 +186,8 @@ public class BookControllerTest {
 
     @Test
     public void shouldDeleteBookWhenBookIdIsValidAndReturnNoContent() throws Exception {
-        doNothing().when(bookService).deleteBook(1L);
+        doNothing()
+                .when(bookService).deleteBook(1L);
 
         mockMvc.perform(delete("/api/books/1"))
                 .andExpect(status().isNoContent());
