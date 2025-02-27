@@ -72,18 +72,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorObject> handleUserNotFoundException(UserNotFoundException ex) {
         ErrorObject errorObject = new ErrorObject(
                 ex.getMessage(),
-                HttpStatus.NO_CONTENT.value()
+                HttpStatus.NOT_FOUND.value()
         );
-        return new ResponseEntity<>(errorObject, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorObject> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         ErrorObject errorObject = new ErrorObject(
                 ex.getMessage(),
-                HttpStatus.NO_CONTENT.value()
+                HttpStatus.NOT_FOUND.value()
         );
-        return new ResponseEntity<>(errorObject, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
