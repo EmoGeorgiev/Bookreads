@@ -28,6 +28,10 @@ public class BookService {
     }
 
     public List<BookDto> getBooksByUserId(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("There does not exist such a user");
+        }
+
         return bookRepository.findByUserId(userId)
                 .stream()
                 .sorted(Comparator.comparing(Book::getDateRead, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
