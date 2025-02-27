@@ -2,6 +2,7 @@ package com.Bookreads.controller;
 
 import com.Bookreads.dto.BookDto;
 import com.Bookreads.enums.Bookshelf;
+import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,6 +29,18 @@ public class BookControllerTests {
 
     @MockBean
     private BookService bookService;
+
+    @Test
+    @WithMockUser
+    public void shouldReturnNotFoundForNonExistentUserId() throws Exception {
+        when(bookService.getBooksByUserId(anyLong()))
+                .thenThrow(new UserNotFoundException("There does not exist a user with such an id"));
+
+        mockMvc.perform(get("/api/books/-1"))
+                .andExpect(status().isNotFound());
+
+        verify(bookService).getBooksByUserId(anyLong());
+    }
 
     @Test
     @WithMockUser
@@ -51,4 +65,6 @@ public class BookControllerTests {
 
         verify(bookService).getBooksByUserId(1L);
     }
+
+
 }
