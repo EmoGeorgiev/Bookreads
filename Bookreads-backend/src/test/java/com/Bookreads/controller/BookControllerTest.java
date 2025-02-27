@@ -2,6 +2,7 @@ package com.Bookreads.controller;
 
 import com.Bookreads.dto.BookDto;
 import com.Bookreads.enums.Bookshelf;
+import com.Bookreads.exception.BookNotFoundException;
 import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,11 +18,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -41,7 +40,8 @@ public class BookControllerTest {
                 .thenThrow(new UserNotFoundException("There does not exist a user with such an id"));
 
         mockMvc.perform(get("/api/books/-1"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("There does not exist a user with such an id"));;
 
         verify(bookService).getBooksByUserId(anyLong());
     }
@@ -107,5 +107,31 @@ public class BookControllerTest {
                         .with(csrf()))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.title").value("Title must be between 1 and 100 characters"));
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldDeleteBookWhenBookIdIsValidAndReturnNoContent() throws Exception {
+        doNothing().when(bookService).deleteBook(anyLong());
+
+        mockMvc.perform(delete("/api/books/1")
+                        .with(csrf()))
+                .andExpect(status().isNoContent());
+
+        verify(bookService).deleteBook(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldReturnNotFoundForNonExistingBookId() throws Exception {
+        doThrow(new BookNotFoundException("There does not exist a book with such an id"))
+                .when(bookService).deleteBook(anyLong());
+
+        mockMvc.perform(delete("/api/books/1")
+                        .with(csrf()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("There does not exist a book with such an id"));
+
+        verify(bookService).deleteBook(anyLong());
     }
 }
