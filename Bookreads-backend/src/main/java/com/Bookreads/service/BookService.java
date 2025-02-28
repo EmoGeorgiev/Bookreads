@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.Bookreads.constants.ErrorMessages.*;
+import static com.Bookreads.util.ErrorMessages.*;
 
 @Service
 public class BookService {

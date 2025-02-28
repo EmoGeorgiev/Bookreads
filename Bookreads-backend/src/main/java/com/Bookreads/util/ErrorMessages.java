@@ -1,4 +1,4 @@
-package com.Bookreads.constants;
+package com.Bookreads.util;
 
 public class ErrorMessages {
     public static final String BOOK_NOT_FOUND_MESSAGE = "There does not exist a book with such an id";

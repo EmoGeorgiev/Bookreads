@@ -1,6 +1,5 @@
 package com.Bookreads.service;
 
-import com.Bookreads.constants.ErrorMessages;
 import com.Bookreads.dto.UserDto;
 import com.Bookreads.exception.UserNotFoundException;
 import com.Bookreads.mapper.UserMapper;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.Bookreads.constants.ErrorMessages.USER_NOT_FOUND_MESSAGE;
+import static com.Bookreads.util.ErrorMessages.USER_NOT_FOUND_MESSAGE;
 
 @Service
 public class UserService {
