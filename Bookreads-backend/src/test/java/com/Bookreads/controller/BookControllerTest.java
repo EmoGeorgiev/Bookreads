@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.Bookreads.constants.ErrorMessages.*;
+import static com.Bookreads.util.ErrorMessages.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,10 +39,10 @@ public class BookControllerTest {
     private BookDto invalidUserIdBookDto;
 
     @BeforeEach
-    public void init() {
-        validBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
-        invalidTitleBookDto = new BookDto(1L, "   ", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
-        invalidUserIdBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, -1L);
+    public void setUp() {
+        validBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ,1L);
+        invalidTitleBookDto = new BookDto(1L, "   ", "Stephen King", 1000, 5, "", null, Bookshelf.READ,1L);
+        invalidUserIdBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ,-1L);
     }
 
     @Test

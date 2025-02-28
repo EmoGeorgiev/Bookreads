@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.Bookreads.constants.ErrorMessages.*;
+import static com.Bookreads.util.ErrorMessages.*;
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {

@@ -1,7 +1,6 @@
 package com.Bookreads.dto;
 
 import com.Bookreads.enums.Bookshelf;
-import com.Bookreads.model.BookUser;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;

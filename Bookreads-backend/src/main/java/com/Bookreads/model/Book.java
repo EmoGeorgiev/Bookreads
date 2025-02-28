@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-import static com.Bookreads.constants.ErrorMessages.*;
+import static com.Bookreads.util.ErrorMessages.*;
 
 @Entity
 @Table(name = "books")
