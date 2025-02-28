@@ -35,13 +35,11 @@ public class BookControllerTest {
     private BookService bookService;
 
     private BookDto validBookDto;
-    private BookDto invalidTitleBookDto;
     private BookDto invalidUserIdBookDto;
 
     @BeforeEach
     public void setUp() {
         validBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
-        invalidTitleBookDto = new BookDto(1L, "   ", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
         invalidUserIdBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, -1L);
     }
 
@@ -100,6 +98,8 @@ public class BookControllerTest {
 
     @Test
     public void shouldReturnBadRequestWhenTitleIsInvalid() throws Exception {
+        BookDto invalidTitleBookDto = new BookDto(1L, "   ", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
+
         mockMvc.perform(post("/api/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidTitleBookDto)))
@@ -140,7 +140,7 @@ public class BookControllerTest {
         when(bookService.updateBook(1L, validBookDto))
                 .thenReturn(validBookDto);
 
-        mockMvc.perform(put("/api/books/{id}", 1L)
+        mockMvc.perform(put("/api/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validBookDto)))
                 .andExpect(status().isOk())
@@ -161,7 +161,7 @@ public class BookControllerTest {
         when(bookService.updateBook(-1L, validBookDto))
                 .thenThrow(new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(put("/api/books/{id}", -1L)
+        mockMvc.perform(put("/api/books/-1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validBookDto)))
                 .andExpect(status().isNotFound())
@@ -175,7 +175,7 @@ public class BookControllerTest {
         when(bookService.updateBook(1L, invalidUserIdBookDto))
                 .thenThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(put("/api/books/{id}", 1L)
+        mockMvc.perform(put("/api/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUserIdBookDto)))
                 .andExpect(status().isNotFound())
