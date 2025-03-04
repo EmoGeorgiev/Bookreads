@@ -1,9 +1,11 @@
 package com.Bookreads.controller;
 
+import com.Bookreads.dto.SignUpDto;
 import com.Bookreads.dto.UpdatePasswordDto;
 import com.Bookreads.dto.UserDto;
 import com.Bookreads.exception.PasswordsDoNotMatchException;
 import com.Bookreads.exception.UserNotFoundException;
+import com.Bookreads.exception.UsernameAlreadyExistsException;
 import com.Bookreads.service.JpaUserDetailsService;
 import com.Bookreads.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.Bookreads.util.ErrorMessages.PASSWORDS_DO_NOT_MATCH;
-import static com.Bookreads.util.ErrorMessages.USER_NOT_FOUND_MESSAGE;
+import static com.Bookreads.util.ErrorMessages.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,10 +39,14 @@ public class UserControllerTest {
     private JpaUserDetailsService userDetailsService;
 
     private UserDto userDto;
+    private SignUpDto signUpDto;
 
     @BeforeEach
     public void setUp() {
-        userDto = new UserDto(1L, "username", "username@gmail.com", new ArrayList<>());
+        String username = "username";
+        String email = "username@gmail.com";
+        userDto = new UserDto(1L, username, email, new ArrayList<>());
+        signUpDto = new SignUpDto(username, "password", email);
     }
 
     @Test
@@ -93,6 +98,37 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[1].books").value(secondUserDto.books()));
 
         verify(userService).getUsers();
+    }
+
+    @Test
+    public void shouldReturnConflictForExistingUsernameWhenCreatingUser() throws Exception {
+        when(userDetailsService.createUser(signUpDto))
+                .thenThrow(new UsernameAlreadyExistsException(USERNAME_ALREADY_EXISTS));
+
+        mockMvc.perform(post("/api/users/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signUpDto)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(USERNAME_ALREADY_EXISTS));
+
+        verify(userDetailsService).createUser(signUpDto);
+    }
+
+    @Test
+    public void shouldReturnUserWhenCreatingUser() throws Exception {
+        when(userDetailsService.createUser(signUpDto))
+                .thenReturn(userDto);
+
+        mockMvc.perform(post("/api/users/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signUpDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(userDto.id()))
+                .andExpect(jsonPath("$.username").value(userDto.username()))
+                .andExpect(jsonPath("$.email").value(userDto.email()));
+
+        verify(userDetailsService).createUser(signUpDto);
     }
 
     @Test
