@@ -46,7 +46,7 @@ public class AuthenticationControllerTest {
 
         mockMvc.perform(post("/api/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\\\"username\\\": \\\"username\\\", \\\"password\\\": \\\"password\\\"}")
+                        .content("{\"username\": \"username\", \"password\": \"password\"}")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value(loginResponseDto.username()))
