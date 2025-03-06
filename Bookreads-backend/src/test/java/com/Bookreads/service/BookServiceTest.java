@@ -39,13 +39,15 @@ public class BookServiceTest {
     private Book secondBook;
     private BookDto bookDto;
     private Long nonExistingId;
+    private Long userId;
 
     @BeforeEach
     void setUp() {
         nonExistingId = -1L;
+        userId = 1L;
 
         user = new BookUser();
-        user.setId(1L);
+        user.setId(userId);
         user.setUsername("username");
         user.setPassword("password");
         user.setEmail("username@gmail.com");
@@ -76,7 +78,7 @@ public class BookServiceTest {
         user.getBooks().add(book);
         user.getBooks().add(secondBook);
 
-        bookDto = new BookDto(book.getId(), book.getTitle(), book.getAuthor(), book.getPageCount(), book.getRating(), book.getReview(), book.getDateRead(), book.getBookshelf(), book.getUser().getId());
+        bookDto = BookMapper.bookToBookDto(book);
     }
 
     @Test
@@ -90,20 +92,20 @@ public class BookServiceTest {
     }
 
     @Test
-    public void shouldReturnListOfBookDtoForExistingUserWithNoBooksWhenGettingBooksByUserId() {
-        when(userService.existsById(user.getId()))
+    public void shouldReturnEmptyListOfBookDtoForExistingUserWithNoBooksWhenGettingBooksByUserId() {
+        when(userService.existsById(userId))
                 .thenReturn(true);
 
-        when(bookRepository.findByUserId(user.getId()))
+        when(bookRepository.findByUserId(userId))
                 .thenReturn(new ArrayList<>());
 
-        List<BookDto> result = bookService.getBooksByUserId(user.getId());
+        List<BookDto> result = bookService.getBooksByUserId(userId);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
 
-        verify(userService).existsById(user.getId());
-        verify(bookRepository).findByUserId(user.getId());
+        verify(userService).existsById(userId);
+        verify(bookRepository).findByUserId(userId);
     }
 
     @Test
@@ -112,13 +114,13 @@ public class BookServiceTest {
                         .map(BookMapper::bookToBookDto)
                         .toList();
 
-        when(userService.existsById(user.getId()))
+        when(userService.existsById(userId))
                 .thenReturn(true);
 
-        when(bookRepository.findByUserId(user.getId()))
+        when(bookRepository.findByUserId(userId))
                 .thenReturn(user.getBooks());
 
-        List<BookDto> result = bookService.getBooksByUserId(user.getId());
+        List<BookDto> result = bookService.getBooksByUserId(userId);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -126,28 +128,32 @@ public class BookServiceTest {
         assertEquals(expectedBooks.get(1), result.get(0));
         assertEquals(expectedBooks.get(0), result.get(1));
 
-        verify(userService).existsById(user.getId());
-        verify(bookRepository).findByUserId(user.getId());
+        verify(userService).existsById(userId);
+        verify(bookRepository).findByUserId(userId);
     }
 
     @Test
     public void shouldThrowBookAlreadyExistsExceptionForMatchingTitleAndAuthorWhenAddingBook() {
+        String title = book.getTitle();
+
         Optional<Book> optionalBook = Optional.of(book);
 
-        when(bookRepository.findByTitleAndUserId(book.getTitle(), book.getUser().getId()))
+        when(bookRepository.findByTitleAndUserId(title, userId))
                 .thenReturn(optionalBook);
 
         assertThrows(BookAlreadyExistsException.class, () -> bookService.addBook(bookDto));
 
-        verify(bookRepository).findByTitleAndUserId(book.getTitle(), book.getUser().getId());
+        verify(bookRepository).findByTitleAndUserId(title, userId);
     }
 
     @Test
     public void shouldReturnBookDtoForNonExistingBookWhenAddingBook() {
-        when(userService.getUserEntity(user.getId()))
+        String title = book.getTitle();
+
+        when(userService.getUserEntity(userId))
                 .thenReturn(user);
 
-        when(bookRepository.findByTitleAndUserId(book.getTitle(), book.getUser().getId()))
+        when(bookRepository.findByTitleAndUserId(title, userId))
                 .thenReturn(Optional.empty());
 
         when(bookRepository.save(any(Book.class)))
@@ -158,17 +164,19 @@ public class BookServiceTest {
         assertNotNull(result);
         assertEquals(result, bookDto);
 
-        verify(userService).getUserEntity(user.getId());
-        verify(bookRepository).findByTitleAndUserId(book.getTitle(), book.getUser().getId());
+        verify(userService).getUserEntity(userId);
+        verify(bookRepository).findByTitleAndUserId(title, userId);
         verify(bookRepository).save(any(Book.class));
     }
 
     @Test
     public void shouldReturnBookDtoForBookWithSameTitleButDifferentAuthorWhenAddingBook() {
-        when(userService.getUserEntity(user.getId()))
+        String title = book.getTitle();
+
+        when(userService.getUserEntity(userId))
                 .thenReturn(user);
 
-        when(bookRepository.findByTitleAndUserId(book.getTitle(), book.getUser().getId()))
+        when(bookRepository.findByTitleAndUserId(title, userId))
                 .thenReturn(Optional.of(secondBook));
 
         when(bookRepository.save(any(Book.class)))
@@ -179,8 +187,8 @@ public class BookServiceTest {
         assertNotNull(result);
         assertEquals(result, bookDto);
 
-        verify(userService).getUserEntity(user.getId());
-        verify(bookRepository).findByTitleAndUserId(book.getTitle(), book.getUser().getId());
+        verify(userService).getUserEntity(userId);
+        verify(bookRepository).findByTitleAndUserId(title,userId);
         verify(bookRepository).save(any(Book.class));
     }
 
@@ -196,22 +204,24 @@ public class BookServiceTest {
 
     @Test
     public void shouldReturnBookDtoForExistingBookIdWhenUpdatingBook() {
-        when(bookRepository.findById(book.getId()))
+        Long bookId = book.getId();
+
+        when(bookRepository.findById(bookId))
                 .thenReturn(Optional.of(book));
 
-        when(userService.getUserEntity(user.getId()))
+        when(userService.getUserEntity(userId))
                 .thenReturn(user);
 
         when(bookRepository.save(any(Book.class)))
                 .thenReturn(book);
 
-        BookDto result = bookService.updateBook(book.getId(), bookDto);
+        BookDto result = bookService.updateBook(bookId, bookDto);
 
         assertNotNull(result);
         assertEquals(result, bookDto);
 
-        verify(bookRepository).findById(book.getId());
-        verify(userService).getUserEntity(user.getId());
+        verify(bookRepository).findById(bookId);
+        verify(userService).getUserEntity(userId);
         verify(bookRepository).save(any(Book.class));
     }
 
@@ -227,15 +237,17 @@ public class BookServiceTest {
 
     @Test
     public void shouldDeleteBookForExistingBookIdWhenDeletingBook() {
-        when(bookRepository.existsById(user.getId()))
+        Long bookId = book.getId();
+
+        when(bookRepository.existsById(bookId))
                 .thenReturn(true);
 
         doNothing()
-                .when(bookRepository).deleteById(user.getId());
+                .when(bookRepository).deleteById(bookId);
 
         bookService.deleteBook(user.getId());
 
-        verify(bookRepository).existsById(user.getId());
-        verify(bookRepository).deleteById(user.getId());
+        verify(bookRepository).existsById(bookId);
+        verify(bookRepository).deleteById(bookId);
     }
 }

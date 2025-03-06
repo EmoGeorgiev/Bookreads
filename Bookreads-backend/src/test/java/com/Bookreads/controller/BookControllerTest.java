@@ -36,31 +36,35 @@ public class BookControllerTest {
 
     private BookDto validBookDto;
     private BookDto invalidUserIdBookDto;
+    private Long nonExistingId;
+    private Long id;
 
     @BeforeEach
     public void setUp() {
-        validBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, 1L);
-        invalidUserIdBookDto = new BookDto(1L, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, -1L);
+        nonExistingId = -1L;
+        id = 1L;
+        validBookDto = new BookDto(id, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, id);
+        invalidUserIdBookDto = new BookDto(id, "It", "Stephen King", 1000, 5, "", null, Bookshelf.READ, nonExistingId);
     }
 
     @Test
     public void shouldReturnNotFoundForNonExistingUserIdWhenGettingBooks() throws Exception {
-        when(bookService.getBooksByUserId(-1L))
+        when(bookService.getBooksByUserId(nonExistingId))
                 .thenThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(get("/api/books/-1"))
+        mockMvc.perform(get("/api/books/" + nonExistingId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(USER_NOT_FOUND_MESSAGE));
 
-        verify(bookService).getBooksByUserId(-1L);
+        verify(bookService).getBooksByUserId(nonExistingId);
     }
 
     @Test
     public void shouldReturnBooksForGivenUserId() throws Exception {
-        when(bookService.getBooksByUserId(1L))
+        when(bookService.getBooksByUserId(id))
                 .thenReturn(List.of(validBookDto));
 
-        mockMvc.perform(get("/api/books/1"))
+        mockMvc.perform(get("/api/books/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(validBookDto.id()))
@@ -71,7 +75,7 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$[0].review").value(validBookDto.review()))
                 .andExpect(jsonPath("$[0].userId").value(validBookDto.userId()));
 
-        verify(bookService).getBooksByUserId(1L);
+        verify(bookService).getBooksByUserId(id);
     }
 
     @Test
@@ -137,10 +141,10 @@ public class BookControllerTest {
 
     @Test
     public void shouldUpdateBookWhenBookIdIsValidAndReturnTheBookResult() throws Exception {
-        when(bookService.updateBook(1L, validBookDto))
+        when(bookService.updateBook(id, validBookDto))
                 .thenReturn(validBookDto);
 
-        mockMvc.perform(put("/api/books/1")
+        mockMvc.perform(put("/api/books/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validBookDto)))
                 .andExpect(status().isOk())
@@ -153,57 +157,57 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.bookshelf").value(validBookDto.bookshelf().name()))
                 .andExpect(jsonPath("$.userId").value(validBookDto.userId()));
 
-        verify(bookService).updateBook(1L, validBookDto);
+        verify(bookService).updateBook(id, validBookDto);
     }
 
     @Test
     public void shouldReturnNotFoundForNonExistingBookIdWhenUpdatingBook() throws Exception {
-        when(bookService.updateBook(-1L, validBookDto))
+        when(bookService.updateBook(nonExistingId, validBookDto))
                 .thenThrow(new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(put("/api/books/-1")
+        mockMvc.perform(put("/api/books/" + nonExistingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validBookDto)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(BOOK_NOT_FOUND_MESSAGE));;
 
-        verify(bookService).updateBook(-1L, validBookDto);
+        verify(bookService).updateBook(nonExistingId, validBookDto);
     }
 
     @Test
     public void shouldReturnNotFoundForNonExistingUserIdWhenUpdatingBook() throws Exception {
-        when(bookService.updateBook(1L, invalidUserIdBookDto))
+        when(bookService.updateBook(id, invalidUserIdBookDto))
                 .thenThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(put("/api/books/1")
+        mockMvc.perform(put("/api/books/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUserIdBookDto)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(USER_NOT_FOUND_MESSAGE));;
 
-        verify(bookService).updateBook(1L, invalidUserIdBookDto);
+        verify(bookService).updateBook(id, invalidUserIdBookDto);
     }
 
     @Test
     public void shouldDeleteBookWhenBookIdIsValidAndReturnNoContent() throws Exception {
         doNothing()
-                .when(bookService).deleteBook(1L);
+                .when(bookService).deleteBook(id);
 
-        mockMvc.perform(delete("/api/books/1"))
+        mockMvc.perform(delete("/api/books/" + id))
                 .andExpect(status().isNoContent());
 
-        verify(bookService).deleteBook(1L);
+        verify(bookService).deleteBook(id);
     }
 
     @Test
     public void shouldReturnNotFoundForNonExistingBookIdWhenDeletingBook() throws Exception {
         doThrow(new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE))
-                .when(bookService).deleteBook(-1L);
+                .when(bookService).deleteBook(nonExistingId);
 
-        mockMvc.perform(delete("/api/books/-1"))
+        mockMvc.perform(delete("/api/books/" + nonExistingId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(BOOK_NOT_FOUND_MESSAGE));
 
-        verify(bookService).deleteBook(-1L);
+        verify(bookService).deleteBook(nonExistingId);
     }
 }

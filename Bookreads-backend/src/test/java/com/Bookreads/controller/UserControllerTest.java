@@ -40,33 +40,38 @@ public class UserControllerTest {
 
     private UserDto userDto;
     private SignUpDto signUpDto;
+    private Long nonExistingId;
+    private Long userId;
 
     @BeforeEach
     public void setUp() {
         String username = "username";
         String email = "username@gmail.com";
-        userDto = new UserDto(1L, username, email, new ArrayList<>());
+        nonExistingId = -1L;
+        userId = 1L;
+
+        userDto = new UserDto(userId, username, email, new ArrayList<>());
         signUpDto = new SignUpDto(username, "password", email);
     }
 
     @Test
     public void shouldReturnNotFoundForNonExistingUserIdWhenGettingUser() throws Exception {
-        when(userService.getUser(-1L))
+        when(userService.getUser(nonExistingId))
                 .thenThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(get("/api/users/-1"))
+        mockMvc.perform(get("/api/users/" + nonExistingId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(USER_NOT_FOUND_MESSAGE));
 
-        verify(userService).getUser(-1L);
+        verify(userService).getUser(nonExistingId);
     }
 
     @Test
     public void shouldReturnUserForGivenUserId() throws Exception {
-        when(userService.getUser(1L))
+        when(userService.getUser(userId))
                 .thenReturn(userDto);
 
-        mockMvc.perform(get("/api/users/1"))
+        mockMvc.perform(get("/api/users/" + userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(userDto.id()))
@@ -75,7 +80,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.books").value(userDto.books()));
 
 
-        verify(userService).getUser(1L);
+        verify(userService).getUser(userId);
     }
 
     @Test
@@ -135,18 +140,18 @@ public class UserControllerTest {
     public void shouldReturnNotFoundForNonExistingUserIdWhenUpdatingUserPassword() throws Exception {
         UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto("oldPassword", "newPassword");
 
-        when(userDetailsService.updatePassword(-1L,
+        when(userDetailsService.updatePassword(nonExistingId,
                                                 updatePasswordDto.oldPassword(),
                                                 updatePasswordDto.newPassword()))
                 .thenThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(put("/api/users/-1/password")
+        mockMvc.perform(put("/api/users/" + nonExistingId + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatePasswordDto)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(USER_NOT_FOUND_MESSAGE));
 
-        verify(userDetailsService).updatePassword(-1L,
+        verify(userDetailsService).updatePassword(nonExistingId,
                                                     updatePasswordDto.oldPassword(),
                                                     updatePasswordDto.newPassword());
     }
@@ -155,7 +160,7 @@ public class UserControllerTest {
     public void shouldReturnBadRequestForInvalidOldPasswordWhenUpdatingUserPassword() throws Exception {
         UpdatePasswordDto invalidOldPasswordDto = new UpdatePasswordDto("pa", "newPassword");
 
-        mockMvc.perform(put("/api/users/1/password")
+        mockMvc.perform(put("/api/users/" + userId + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidOldPasswordDto)))
                 .andExpect(status().isBadRequest())
@@ -166,7 +171,7 @@ public class UserControllerTest {
     public void shouldReturnBadRequestForInvalidNewPasswordWhenUpdatingUserPassword() throws Exception {
         UpdatePasswordDto invalidNewPasswordDto = new UpdatePasswordDto("oldPassword", "ab");
 
-        mockMvc.perform(put("/api/users/1/password")
+        mockMvc.perform(put("/api/users/" + userId + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidNewPasswordDto)))
                 .andExpect(status().isBadRequest())
@@ -177,26 +182,26 @@ public class UserControllerTest {
     public void shouldReturnBadRequestForWrongPasswordWhenUpdatingPassword() throws Exception {
         UpdatePasswordDto wrongPasswordDto = new UpdatePasswordDto("wrongPassword", "newPassword");
 
-        when(userDetailsService.updatePassword(1L, wrongPasswordDto.oldPassword(), wrongPasswordDto.newPassword()))
+        when(userDetailsService.updatePassword(userId, wrongPasswordDto.oldPassword(), wrongPasswordDto.newPassword()))
                 .thenThrow(new PasswordsDoNotMatchException(PASSWORDS_DO_NOT_MATCH));
 
-        mockMvc.perform(put("/api/users/1/password")
+        mockMvc.perform(put("/api/users/" + userId + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(wrongPasswordDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(PASSWORDS_DO_NOT_MATCH));
 
-        verify(userDetailsService).updatePassword(1L, wrongPasswordDto.oldPassword(), wrongPasswordDto.newPassword());
+        verify(userDetailsService).updatePassword(userId, wrongPasswordDto.oldPassword(), wrongPasswordDto.newPassword());
     }
 
     @Test
     public void shouldReturnUserWhenUpdatingPassword() throws Exception {
         UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto("oldPassword", "newPassword");
 
-        when(userDetailsService.updatePassword(1L, updatePasswordDto.oldPassword(), updatePasswordDto.newPassword()))
+        when(userDetailsService.updatePassword(userId, updatePasswordDto.oldPassword(), updatePasswordDto.newPassword()))
                 .thenReturn(userDto);
 
-        mockMvc.perform(put("/api/users/1/password")
+        mockMvc.perform(put("/api/users/" + userId + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatePasswordDto)))
                 .andExpect(status().isOk())
@@ -205,29 +210,29 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.email").value(userDto.email()))
                 .andExpect(jsonPath("$.books").value(userDto.books()));
 
-        verify(userDetailsService).updatePassword(1L, updatePasswordDto.oldPassword(), updatePasswordDto.newPassword());
+        verify(userDetailsService).updatePassword(userId, updatePasswordDto.oldPassword(), updatePasswordDto.newPassword());
     }
 
     @Test
     public void shouldReturnNotFoundForNonExistingUserIdWhenUpdatingUser() throws Exception {
-        when(userService.updateUser(-1L, userDto))
+        when(userService.updateUser(nonExistingId, userDto))
                 .thenThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
-        mockMvc.perform(put("/api/users/-1")
+        mockMvc.perform(put("/api/users/" + nonExistingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(USER_NOT_FOUND_MESSAGE));
 
-        verify(userService).updateUser(-1L, userDto);
+        verify(userService).updateUser(nonExistingId, userDto);
     }
 
     @Test
     public void shouldReturnNewUserWhenUpdatingUser() throws Exception {
-        when(userService.updateUser(1L, userDto))
+        when(userService.updateUser(userId, userDto))
                 .thenReturn(userDto);
 
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(put("/api/users/" + userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -237,14 +242,14 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.email").value(userDto.email()))
                 .andExpect(jsonPath("$.books").value(userDto.books()));
 
-        verify(userService).updateUser(1L, userDto);
+        verify(userService).updateUser(userId, userDto);
     }
 
     @Test
     public void shouldReturnIsBadRequestForInvalidUsernameWhenUpdatingUser() throws Exception {
         UserDto invalidUsernameDto = new UserDto(2L, "ab", "secondUser@gmail.com", new ArrayList<>());
 
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(put("/api/users/" + invalidUsernameDto.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUsernameDto)))
                 .andExpect(status().isBadRequest())
@@ -255,7 +260,7 @@ public class UserControllerTest {
     public void shouldReturnIsBadRequestForInvalidEmailWhenUpdatingUser() throws Exception {
         UserDto invalidEmailDto = new UserDto(2L, "secondUsername", "secondUser", new ArrayList<>());
 
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(put("/api/users/" + invalidEmailDto.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidEmailDto)))
                 .andExpect(status().isBadRequest())
@@ -265,23 +270,23 @@ public class UserControllerTest {
     @Test
     public void shouldReturnNotFoundForNonExistingUserIdWhenDeletingUser() throws Exception {
         doThrow(new UserNotFoundException(USER_NOT_FOUND_MESSAGE))
-                .when(userService).deleteUser(-1L);
+                .when(userService).deleteUser(nonExistingId);
 
-        mockMvc.perform(delete("/api/users/-1"))
+        mockMvc.perform(delete("/api/users/" + nonExistingId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(USER_NOT_FOUND_MESSAGE));
 
-        verify(userService).deleteUser(-1L);
+        verify(userService).deleteUser(nonExistingId);
     }
 
     @Test
     public void shouldDeleteUserAndReturnNoContent() throws Exception {
         doNothing()
-                .when(userService).deleteUser(1L);
+                .when(userService).deleteUser(userId);
 
-        mockMvc.perform(delete("/api/users/1"))
+        mockMvc.perform(delete("/api/users/" + userId))
                 .andExpect(status().isNoContent());
 
-        verify(userService).deleteUser(1L);
+        verify(userService).deleteUser(userId);
     }
 }

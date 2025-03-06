@@ -28,13 +28,15 @@ public class UserServiceTest {
     private BookUser user;
     private UserDto userDto;
     private Long nonExistingId;
+    private Long userId;
 
     @BeforeEach
     void setUp() {
         nonExistingId = -1L;
+        userId = 1L;
 
         user = new BookUser();
-        user.setId(1L);
+        user.setId(userId);
         user.setUsername("username");
         user.setPassword("password");
         user.setEmail("username@gmail.com");
@@ -45,8 +47,6 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnTrueForExistingUserId() {
-        Long userId = user.getId();
-
         when(userRepository.existsById(userId))
                 .thenReturn(true);
 
@@ -81,8 +81,6 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnUserForExistingUserIdWhenGettingUserEntity() {
-        Long userId = user.getId();
-
         when(userRepository.findById(userId))
                 .thenReturn(Optional.of(user));
 
@@ -100,8 +98,6 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnUserDtoForExistingUserIdWhenGettingUser() {
-        Long userId = user.getId();
-
         when(userRepository.findById(userId))
                 .thenReturn(Optional.of(user));
 
@@ -165,8 +161,6 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnUserDtoForExistingUserIdWhenUpdatingUser() {
-        Long userId = user.getId();
-
         when(userRepository.findById(userId))
                 .thenReturn(Optional.of(user));
 
@@ -194,17 +188,15 @@ public class UserServiceTest {
 
     @Test
     public void shouldDeleteUserForExistingUserIdWhenDeletingUser() {
-        Long id = user.getId();
-
-        when(userRepository.existsById(id))
+        when(userRepository.existsById(userId))
                 .thenReturn(true);
 
         doNothing()
-                .when(userRepository).deleteById(id);
+                .when(userRepository).deleteById(userId);
 
-        userService.deleteUser(id);
+        userService.deleteUser(userId);
 
-        verify(userRepository).existsById(id);
-        verify(userRepository).deleteById(id);
+        verify(userRepository).existsById(userId);
+        verify(userRepository).deleteById(userId);
     }
 }
